@@ -1,0 +1,1 @@
+python -m code.eeg_ldm  --dataset 'MYEEG' --root_path ./preproc_data --split_key stim  --num_epoch 25 --batch_size 4 --pretrain_gm_path './pretrains'  --precision 32 --ddim_steps 10

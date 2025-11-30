@@ -1,0 +1,31 @@
+# DreamDiffusion (Windows) - pip requirements (EXCLUDES torch/torchvision/torchaudio)
+# Install the correct CUDA-enabled PyTorch separately first (see commands below).
+
+# --- Core ---
+numpy>=1.23,<2.0
+scipy>=1.10
+pillow>=9.5
+opencv-python>=4.7
+tqdm>=4.65
+h5py>=3.8
+PyYAML>=6.0
+
+# --- ML / Vision ---
+scikit-image>=0.20
+scikit-learn>=1.3
+matplotlib>=3.7
+einops>=0.6
+omegaconf>=2.1,<2.3
+kornia>=0.6,<0.7
+lpips>=0.1.4
+torchmetrics==0.11.4
+pytorch-lightning==1.8.6
+
+# --- CLIP image encoder ---
+# The original repo uses OpenAI CLIP. If this git install is blocked on your machine,
+# you can replace it with: clip-anytorch==2.6.0 and adjust imports accordingly.
+# git+https://github.com/openai/CLIP.git
+
+# --- Optional (uncomment if your code complains) ---
+# albumentations>=1.3.0
+# transformers>=4.30,<4.41
