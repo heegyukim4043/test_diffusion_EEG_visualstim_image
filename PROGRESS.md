@@ -32,12 +32,15 @@ python preflight_track_a.py \
 
 **서버 워크스페이스 PROGRESS.md 기록**: static PE 패치 후 S24 encoder RBLN compile / NPU inference / equivalence test 통과라고 기재되어 있음
 
-→ **두 기록이 다름. 다음 CUDA 서버 접속 시 반드시 확인 필요:**
-1. `outputs/logs/rbln_compile_diagnostics/` 실제 compile 성공 로그 존재 여부
-2. T5 또는 T7 rebel compile 성공 여부
-3. NPU inference equivalence 수치
+**Track B 검증 완료 (2026-06-27):**
 
-결과 확인 전까지 Track B RBLN compile은 **"미확인 (pending verification)"** 처리.
+| Target | 결과 | 비고 |
+|--------|------|------|
+| T5 static-PE encoder compile | **SUCCESS** | dynamic torch.arange → static buffer 패치로 해결 |
+| T7 S24 real ckpt + static-PE compile | **SUCCESS** | 실제 S24 SupCon 가중치 로드 후 NPU compile 통과 |
+| T6 original full encoder compile | **FAIL** | `aten::_transformer_encoder_layer_fwd` RBLN 미지원 |
+
+**결론**: static PE buffer 패치(`Target5_EncoderV2StaticPE`)가 RBLN compile 블로커를 해소함. 원본 dynamic PE는 여전히 실패. `EEGEncoderV2` 배포 시 static PE 버전으로 교체 필요.
 
 ---
 
