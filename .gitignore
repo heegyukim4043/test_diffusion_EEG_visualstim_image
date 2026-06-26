@@ -1,5 +1,7 @@
 # 데이터 (대용량)
-preproc_vs_re/
+# preproc_vs_re: .mat 제외, .npz (float16 압축) 허용
+preproc_vs_re/*
+!preproc_vs_re/*.npz
 preproc_vi_re/
 preproc_data/
 preproc_data_rest/

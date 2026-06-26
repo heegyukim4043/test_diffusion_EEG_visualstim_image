@@ -45,23 +45,23 @@ _T_START   = 1024   # 0 sec
 _T_END     = 3072   # 2 sec  →  2048 samples
 _BL_START  = 0      # -1 sec (baseline)
 _BL_END    = 1024   # 0 sec
+_N_CH_NPZ  = 32     # convert_vsre_to_npz.py 가 저장하는 채널 수
 
 
 def _list_sessions(data_root: str, sid: int) -> List[int]:
     """sid에 해당하는 세션 번호 목록 반환.
 
+    .npz 와 .mat 모두 스캔. npz가 있으면 mat 없어도 세션으로 인정.
     NOTE: 파일 번호가 연속적이지 않을 수 있음 (gap 허용).
-    전체 디렉토리를 스캔해 해당 피험자의 모든 파일을 수집.
     """
-    sessions = []
+    sessions = set()
+    prefix = f"preproc_subj_{sid:02d}_"
     for fname in sorted(os.listdir(data_root)):
-        if not fname.endswith(".mat"):
-            continue
-        prefix = f"preproc_subj_{sid:02d}_"
-        if fname.startswith(prefix):
+        if fname.startswith(prefix) and fname.endswith((".mat", ".npz")):
+            ext_len = 4  # ".mat" or ".npz"
             try:
-                sess_num = int(fname[len(prefix):-4])
-                sessions.append(sess_num)
+                sess_num = int(fname[len(prefix):-ext_len])
+                sessions.add(sess_num)
             except ValueError:
                 continue
     return sorted(sessions)
@@ -106,45 +106,70 @@ def load_subject_vsre(
     effective_sessions = 0
 
     for sess in sessions:
-        path = os.path.join(data_root, f"preproc_subj_{sid:02d}_{sess}.mat")
-        with h5py.File(path, "r") as f:
-            raw = f["results/data"]
-            # Read actual shape — do NOT assume (5, 3, 9, 4096, 40)
-            data = np.array(raw)                         # (n_rep, n_blk, n_cls, 4096, n_all_ch)
+        npz_path = os.path.join(data_root, f"preproc_subj_{sid:02d}_{sess}.npz")
+        mat_path = os.path.join(data_root, f"preproc_subj_{sid:02d}_{sess}.mat")
 
-        if data.ndim != 5:
-            print(f"  [dataset] SKIP S{sid:02d} sess{sess}: unexpected ndim={data.ndim}", flush=True)
-            continue
+        # ── .npz 우선 로드 (fast path) ─────────────────────────────────────
+        _npz_ok = (
+            os.path.isfile(npz_path)
+            and n_ch == _N_CH_NPZ           # npz는 32ch 고정
+            and t_start == _T_START         # 같은 시간 슬라이스여야 함
+            and t_end == _T_END
+            and not baseline_correct        # baseline 데이터는 npz에 없음
+        )
+        if _npz_ok:
+            try:
+                z = np.load(npz_path)
+                arr    = z["eeg"].astype(np.float32)   # (n_trials, 32, 2048)
+                labels = z["labels"].astype(np.int64)
+                print(f"  [dataset] S{sid:02d} sess{sess}: npz  shape={arr.shape}", flush=True)
+            except Exception as e:
+                print(f"  [dataset] S{sid:02d} sess{sess}: npz load failed ({e}), fallback to mat", flush=True)
+                _npz_ok = False
 
-        n_rep, n_blk, n_cls, n_time, n_all_ch = data.shape
-        if n_rep == 0 or n_blk == 0 or n_cls == 0:
-            print(f"  [dataset] SKIP S{sid:02d} sess{sess}: empty session shape={data.shape}", flush=True)
-            continue
-        # Sanity: n_rep should be small (nominally 5). Flag and skip if anomalously large.
-        if n_rep > 20:
-            print(f"  [dataset] SKIP S{sid:02d} sess{sess}: anomalous n_rep={n_rep} (expected <=20), shape={data.shape}", flush=True)
-            continue
+        # ── .mat 폴백 ──────────────────────────────────────────────────────
+        if not _npz_ok:
+            if not os.path.isfile(mat_path):
+                print(f"  [dataset] SKIP S{sid:02d} sess{sess}: neither .npz nor .mat found", flush=True)
+                continue
+            with h5py.File(mat_path, "r") as f:
+                raw = f["results/data"]
+                # Read actual shape — do NOT assume (5, 3, 9, 4096, 40)
+                data = np.array(raw)                         # (n_rep, n_blk, n_cls, 4096, n_all_ch)
 
-        # Baseline correction: subtract -1~0 sec mean from 0~2 sec signal
-        if baseline_correct and _BL_END <= t_start:
-            bl = data[:, :, :, _BL_START:_BL_END, :n_ch]   # (n_rep, n_blk, n_cls, 1024, ch)
-            bl_mean = bl.mean(axis=3, keepdims=True)          # (n_rep, n_blk, n_cls, 1, ch)
-            sig = data[:, :, :, t_start:t_end, :n_ch] - bl_mean
-        else:
-            sig = data[:, :, :, t_start:t_end, :n_ch]
+            if data.ndim != 5:
+                print(f"  [dataset] SKIP S{sid:02d} sess{sess}: unexpected ndim={data.ndim}", flush=True)
+                continue
 
-        data = sig                                           # (n_rep, n_blk, n_cls, T, ch)
-        _, _, _, T, ch = data.shape
+            n_rep, n_blk, n_cls, n_time, n_all_ch = data.shape
+            if n_rep == 0 or n_blk == 0 or n_cls == 0:
+                print(f"  [dataset] SKIP S{sid:02d} sess{sess}: empty session shape={data.shape}", flush=True)
+                continue
+            # Sanity: n_rep should be small (nominally 5). Flag and skip if anomalously large.
+            if n_rep > 20:
+                print(f"  [dataset] SKIP S{sid:02d} sess{sess}: anomalous n_rep={n_rep} (expected <=20), shape={data.shape}", flush=True)
+                continue
 
-        data = data.transpose(2, 4, 3, 0, 1)             # (n_cls, ch, T, n_rep, n_blk)
-        data = data.reshape(n_cls, ch, T, -1)             # (n_cls, ch, T, n_rep*n_blk)
-        data = data.transpose(0, 3, 1, 2)                # (n_cls, n_rep*n_blk, ch, T)
-        data = data.reshape(-1, ch, T)                   # (n_cls*n_rep*n_blk, ch, T)
+            # Baseline correction: subtract -1~0 sec mean from 0~2 sec signal
+            if baseline_correct and _BL_END <= t_start:
+                bl = data[:, :, :, _BL_START:_BL_END, :n_ch]   # (n_rep, n_blk, n_cls, 1024, ch)
+                bl_mean = bl.mean(axis=3, keepdims=True)          # (n_rep, n_blk, n_cls, 1, ch)
+                sig = data[:, :, :, t_start:t_end, :n_ch] - bl_mean
+            else:
+                sig = data[:, :, :, t_start:t_end, :n_ch]
 
-        n_trials_per_cls = n_rep * n_blk
-        labels = np.repeat(np.arange(n_cls, dtype=np.int64), n_trials_per_cls)
+            data = sig                                           # (n_rep, n_blk, n_cls, T, ch)
+            _, _, _, T, ch = data.shape
 
-        arr = data.astype(np.float32)   # (n_trials, ch, T)
+            data = data.transpose(2, 4, 3, 0, 1)             # (n_cls, ch, T, n_rep, n_blk)
+            data = data.reshape(n_cls, ch, T, -1)             # (n_cls, ch, T, n_rep*n_blk)
+            data = data.transpose(0, 3, 1, 2)                # (n_cls, n_rep*n_blk, ch, T)
+            data = data.reshape(-1, ch, T)                   # (n_cls*n_rep*n_blk, ch, T)
+
+            n_trials_per_cls = n_rep * n_blk
+            labels = np.repeat(np.arange(n_cls, dtype=np.int64), n_trials_per_cls)
+
+            arr = data.astype(np.float32)   # (n_trials, ch, T)
 
         # Channel-wise z-score per trial
         if ch_zscore:
@@ -167,12 +192,15 @@ def load_subject_vsre(
 
 
 def available_subjects(data_root: str) -> List[int]:
-    """데이터 루트에서 파일이 존재하는 피험자 ID 목록 반환."""
+    """데이터 루트에서 파일(.mat 또는 .npz)이 존재하는 피험자 ID 목록 반환."""
     sids = set()
     for fname in os.listdir(data_root):
-        if fname.startswith("preproc_subj_") and fname.endswith(".mat"):
-            parts = fname.replace(".mat", "").split("_")
-            sids.add(int(parts[2]))
+        if fname.startswith("preproc_subj_") and fname.endswith((".mat", ".npz")):
+            parts = fname.split("_")
+            try:
+                sids.add(int(parts[2]))
+            except (IndexError, ValueError):
+                pass
     return sorted(sids)
 
 
