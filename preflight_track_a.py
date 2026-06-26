@@ -107,18 +107,16 @@ def main():
     # ── 6. EEG data (optional) ─────────────────────────────────────────────
     if args.check_data:
         import glob
-        pat = os.path.join(args.data_root, f"*subj*{sid:02d}*.mat")
-        mat_files = glob.glob(pat)
-        # also try preproc_subj_24_*.mat style
-        pat2 = os.path.join(args.data_root, f"preproc_subj_{sid:02d}_*.mat")
-        mat_files += glob.glob(pat2)
-        mat_files = sorted(set(mat_files))
-        ok = len(mat_files) > 0
-        results.append(check(
-            f"EEG .mat files for S{sid}",
-            ok,
-            f"{len(mat_files)} file(s) in {args.data_root}" if ok else f"none found in {args.data_root}"
-        ))
+        prefix = os.path.join(args.data_root, f"preproc_subj_{sid:02d}_")
+        npz_files = sorted(glob.glob(prefix + "*.npz"))
+        mat_files = sorted(glob.glob(prefix + "*.mat"))
+        n_npz, n_mat = len(npz_files), len(mat_files)
+        ok = (n_npz + n_mat) > 0
+        if ok:
+            detail = f"{n_npz} .npz + {n_mat} .mat in {args.data_root}"
+        else:
+            detail = f"none found in {args.data_root}"
+        results.append(check(f"EEG data for S{sid}", ok, detail))
 
     # ── 7. ckpt_root writable ──────────────────────────────────────────────
     ckpt_parent = args.ckpt_root
