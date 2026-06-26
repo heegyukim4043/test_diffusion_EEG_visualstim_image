@@ -22,6 +22,22 @@
 - **생성 패턴**: diverse generation (high entropy)이지만 class-unconditioned → DINO@1 = chance
 - **올바른 S24용 SupCon**: `checkpoints_vsre_dino/20260604_091352_ch32_merged_ep200_supcon` (Exp26 전체 피험자, S24 Top-1=0.3259)
 
+### train_vs_re_lora_gen.py 패치 완료 (Track A, 2026-06-27)
+
+- **변경 전**: `subj{XX}_best.pt` 없으면 경고 없이 random EEG encoder init으로 진행
+- **변경 후**:
+  - 파일 없으면 기본적으로 `FileNotFoundError` 발생
+  - `--allow_random_encoder` 플래그로만 random init 허용 (명시적 디버깅용)
+  - SupCon 로드 시 정확한 경로 출력: `Loaded SupCon checkpoint: <path>`
+  - 저장되는 LoRA checkpoint에 provenance 메타데이터 포함:
+    `supcon_ckpt_dir`, `supcon_ckpt_path`, `encoder_source`, `allow_random_encoder`, `lora_r`, `n_eeg_tokens`
+- `py_compile` 통과 확인
+
+### 기존 S24 체크포인트 판정
+
+- **S24 r=16** (`20260625_111012`): invalid — random encoder init (SupCon 누락)
+- **S24 r=32** (`20260626_073002`): provenance uncertain — 체크포인트 내부에 SupCon path 없음, 학습 로그도 없음 → valid 평가 대상으로 사용 불가
+
 ### S24 재실행 커맨드 (미실행)
 
 ```bash

@@ -250,6 +250,8 @@ def train_subject(sid, args, vae, dino, proto_dino, dino_feat_dim, acp, device, 
     # EEG encoder (frozen)
     eeg_enc = build_eeg_encoder(args.n_ch, dino_feat_dim,
                                  type('a', (), {'eeg_occipital_ids': 'auto'})(), device)
+    encoder_source = "random"
+    supcon_ckpt_path_used = None
     if args.supcon_ckpt:
         ckpt_path = os.path.join(args.supcon_ckpt, f"subj{sid:02d}_best.pt")
         if os.path.isfile(ckpt_path):
@@ -258,10 +260,20 @@ def train_subject(sid, args, vae, dino, proto_dino, dino_feat_dim, acp, device, 
                 eeg_enc.load_state_dict(ckpt["eeg_enc"])
             elif "model" in ckpt:
                 eeg_enc.load_state_dict(ckpt["model"])
-            print(f"  [Encoder] Loaded from {ckpt_path}", flush=True)
+            print(f"  [Encoder] Loaded SupCon checkpoint: {ckpt_path}", flush=True)
+            encoder_source = "supcon"
+            supcon_ckpt_path_used = ckpt_path
+        else:
+            if getattr(args, 'allow_random_encoder', False):
+                print(f"  [Encoder] WARNING: {ckpt_path} not found — using random init (--allow_random_encoder set)", flush=True)
+            else:
+                raise FileNotFoundError(
+                    f"SupCon checkpoint not found: {ckpt_path}\n"
+                    f"Use --allow_random_encoder to explicitly allow random EEG encoder init."
+                )
     for p in eeg_enc.parameters():
         p.requires_grad_(False)
-    print(f"  [Encoder] Frozen", flush=True)
+    print(f"  [Encoder] Frozen (source={encoder_source})", flush=True)
 
     # SD 1.5 UNet with LoRA
     unet = load_sd15_unet_lora(args.lora_r, args.lora_alpha)
@@ -323,6 +335,14 @@ def train_subject(sid, args, vae, dino, proto_dino, dino_feat_dim, acp, device, 
                 "unet_lora": {k:v for k,v in unet.named_parameters() if v.requires_grad},
                 "cond_proj": cond_proj.state_dict(),
                 "sid": sid,
+                "provenance": {
+                    "supcon_ckpt_dir": args.supcon_ckpt,
+                    "supcon_ckpt_path": supcon_ckpt_path_used,
+                    "encoder_source": encoder_source,
+                    "allow_random_encoder": getattr(args, 'allow_random_encoder', False),
+                    "lora_r": args.lora_r,
+                    "n_eeg_tokens": args.n_eeg_tokens,
+                },
             }, best_path)
 
         if epoch - best_ep >= args.patience:
@@ -362,6 +382,8 @@ def main():
                         help="Use deeper 3-layer MLP projection (Exp42-B Step 3)")
     parser.add_argument("--augment_targets",  action="store_true",
                         help="Apply class-preserving augmentation to target images (Exp42-B Step 5)")
+    parser.add_argument("--allow_random_encoder", action="store_true",
+                        help="Allow random EEG encoder init when supcon_ckpt file is missing (debug only)")
     parser.add_argument("--supcon_ckpt",   default="checkpoints_vsre_latent_gen/20260610_105755_ch32_ep300_supcon_frozen_ca",
                         help="Dir with subj{sid:02d}_best.pt containing eeg_enc state")
     parser.add_argument("--dino_model",    default="dinov2_vits14")
