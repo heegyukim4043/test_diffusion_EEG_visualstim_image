@@ -1,6 +1,45 @@
 # EEG-to-Image Diffusion Model: Progress Log
 
-## Current Status Summary (2026-06-27)
+## Current Status Summary (2026-06-27) [Updated]
+
+### Track A — S24 SD LoRA VS Generation (P0)
+
+**상태**: 실행 대기. 현재 확인된 서버(/home/work/test_vsvi) 환경:
+
+| 항목 | 상태 |
+|------|------|
+| torch CUDA | ✗ (torch 2.9.1+cpu) |
+| peft | ✗ 없음 |
+| S24 VS data (`preproc_vs_re/preproc_subj_24_*.mat` × 10) | ✓ |
+| `preproc_data_vi/images/01~09.png` | ✗ 없음 |
+| SupCon S24 ckpt (`20260604_091352/.../subj24_best.pt`) | ✗ 없음 |
+
+→ **이 서버에서는 Track A 실행 불가.** CUDA 서버에서 먼저 preflight 통과 후 실행:
+
+```bash
+python preflight_track_a.py \
+  --subject_id 24 \
+  --img_root preproc_data_vi/images \
+  --supcon_ckpt checkpoints_vsre_dino/20260604_091352_ch32_merged_ep200_supcon \
+  --data_root preproc_vs_re \
+  --ckpt_root checkpoints_vsre_lora_gen \
+  --check_data
+```
+
+### Track B — RBLN NPU 컴파일 (상태 불일치 주의)
+
+**GitHub 기록 (이 파일)**: transformer graph conversion 실패, static PE 패치로 T5/T7 eager OK, rebel compile 미확인
+
+**서버 워크스페이스 PROGRESS.md 기록**: static PE 패치 후 S24 encoder RBLN compile / NPU inference / equivalence test 통과라고 기재되어 있음
+
+→ **두 기록이 다름. 다음 CUDA 서버 접속 시 반드시 확인 필요:**
+1. `outputs/logs/rbln_compile_diagnostics/` 실제 compile 성공 로그 존재 여부
+2. T5 또는 T7 rebel compile 성공 여부
+3. NPU inference equivalence 수치
+
+결과 확인 전까지 Track B RBLN compile은 **"미확인 (pending verification)"** 처리.
+
+---
 
 ### GitHub 백업 완료
 
