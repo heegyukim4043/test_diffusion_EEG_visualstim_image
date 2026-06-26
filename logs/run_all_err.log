@@ -1,0 +1,19 @@
+C:\Users\Biocomputing/.cache\torch\hub\facebookresearch_dinov2_main\dinov2\layers\swiglu_ffn.py:51: UserWarning: xFormers is not available (SwiGLU)
+  warnings.warn("xFormers is not available (SwiGLU)")
+C:\Users\Biocomputing/.cache\torch\hub\facebookresearch_dinov2_main\dinov2\layers\attention.py:33: UserWarning: xFormers is not available (Attention)
+  warnings.warn("xFormers is not available (Attention)")
+C:\Users\Biocomputing/.cache\torch\hub\facebookresearch_dinov2_main\dinov2\layers\block.py:40: UserWarning: xFormers is not available (Block)
+  warnings.warn("xFormers is not available (Block)")
+Traceback (most recent call last):
+  File "C:\Users\Biocomputing\Desktop\workspace_VIVS\test_diffusion_model\run_all_experiments.py", line 656, in <module>
+    main()
+  File "C:\Users\Biocomputing\Desktop\workspace_VIVS\test_diffusion_model\run_all_experiments.py", line 404, in main
+    r   = run_loso(exp, subject_ids, cls_list,
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Biocomputing\Desktop\workspace_VIVS\test_diffusion_model\run_all_experiments.py", line 225, in run_loso
+    r = train_one_fold(
+        ^^^^^^^^^^^^^^^
+  File "C:\Users\Biocomputing\Desktop\workspace_VIVS\test_diffusion_model\run_all_experiments.py", line 161, in train_one_fold
+    ep_loss  += loss.item() * eeg.size(0)
+                ^^^^^^^^^^^
+KeyboardInterrupt

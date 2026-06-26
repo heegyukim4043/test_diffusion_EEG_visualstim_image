@@ -1,0 +1,62 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+WARNING:huggingface_hub.utils._http:Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+C:\Users\Biocomputing\anaconda3\envs\eegdiff\Lib\site-packages\open_clip\factory.py:450: UserWarning: QuickGELU mismatch between final model config (quick_gelu=False) and pretrained tag 'openai' (quick_gelu=True).
+  warnings.warn(
+[INFO] Device: cuda  n_ch=32  max_sessions=None
+[INFO] CLIP model: ViT-B-32 (openai)  dim=512
+[INFO] Subjects (3): [1, 2, 18]
+[INFO] Session counts: {1: 10, 2: 9, 18: 8}
+[INFO] Loading CLIP: ViT-B-32 (openai)
+  proto_clip: torch.Size([9, 512])  (should be [9, 512])
+
+=======================================================
+  Subject 01  (sessions=10)
+  [dataset] SKIP S01 sess9: anomalous n_rep=108 (expected <=20), shape=(108, 3, 9, 4096, 40)
+  [dataset] S01  trials=1215  eff_sessions=9
+  [dataset] SKIP S01 sess9: anomalous n_rep=108 (expected <=20), shape=(108, 3, 9, 4096, 40)
+  [dataset] SKIP S01 sess9: anomalous n_rep=108 (expected <=20), shape=(108, 3, 9, 4096, 40)
+  S01  train=972  val=117  test=126
+    Ep     Loss   ValT1   ValT3   ValT5    temp
+    40   7.3054  0.1111  0.3333  0.5556   0.102
+    80   7.2966  0.1111  0.3333  0.5556   0.102
+   120   7.3015  0.1111  0.3333  0.5556   0.102
+   160   7.3012  0.1111  0.3333  0.5556   0.102
+   200   7.3013  0.1111  0.3077  0.5556   0.102
+  [Test S01]  Top-1=0.3016  Top-3=0.5317  Top-5=0.7619  (random=0.1111)
+
+=======================================================
+  Subject 02  (sessions=9)
+  [dataset] S02  trials=1161  eff_sessions=9
+  S02  train=927  val=108  test=126
+    Ep     Loss   ValT1   ValT3   ValT5    temp
+    40   6.9378  0.1759  0.5093  0.7500   0.108
+    80   7.2999  0.1111  0.3333  0.5556   0.110
+   120   7.2966  0.1111  0.3333  0.5556   0.110
+   160   7.2970  0.1111  0.3333  0.5556   0.110
+   200   7.2980  0.1111  0.3333  0.5556   0.110
+  [Test S02]  Top-1=0.2222  Top-3=0.5873  Top-5=0.8016  (random=0.1111)
+
+=======================================================
+  Subject 18  (sessions=8)
+  [dataset] S18  trials=1080  eff_sessions=8
+  S18  train=864  val=108  test=108
+    Ep     Loss   ValT1   ValT3   ValT5    temp
+    40   3.4643  0.2593  0.5556  0.7685   0.097
+    80  -1.5374  0.2315  0.5370  0.7685   0.063
+   120  -12.3927  0.2407  0.5093  0.6852   0.042
+   160  -19.2068  0.2407  0.5185  0.7037   0.034
+   200  -20.9978  0.3148  0.5926  0.7685   0.033
+  [Test S18]  Top-1=0.1944  Top-3=0.4630  Top-5=0.7037  (random=0.1111)
+
+=======================================================
+  Summary  [merged, ch=32, clip=ViT-B-32]
+   Subj    Top-1    Top-3    Top-5
+  --------------------------------
+  S01     0.3016   0.5317   0.7619
+  S02     0.2222   0.5873   0.8016
+  S18     0.1944   0.4630   0.7037
+  --------------------------------
+  Mean    0.2394   0.5273   0.7557
+  Random  0.1111
+
+[INFO] Saved: ./checkpoints_vsre_clip\20260527_190947_ViT-B-32_ch32_merged_ep200

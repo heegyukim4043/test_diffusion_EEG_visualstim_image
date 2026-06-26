@@ -1,0 +1,40 @@
+name: eeg_diffusion_repa
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+  - defaults
+
+dependencies:
+  - python=3.10
+  - pip
+
+  # PyTorch (CUDA 12.1 — GPU 없으면 cpuonly 버전으로 변경)
+  - pytorch::pytorch=2.2.*
+  - pytorch::torchvision=0.17.*
+  - pytorch::pytorch-cuda=12.1   # GPU 없으면 이 줄 제거
+
+  # 수치 / 데이터
+  - numpy>=1.24
+  - scipy>=1.10
+
+  # 이미지
+  - pillow>=9.5
+
+  # 시각화
+  - matplotlib>=3.7
+
+  # pip로 설치할 패키지
+  - pip:
+      - tqdm>=4.66
+      - kornia>=0.7
+
+# ────────────────────────────────────────────────────────────
+# 설치 방법
+# ────────────────────────────────────────────────────────────
+# conda env create -f environment_repa.yml
+# conda activate eeg_diffusion_repa
+#
+# GPU 없는 경우: pytorch-cuda 줄을 제거하고
+#   pytorch::pytorch=2.2.*=*cpu* 로 변경 후 실행
+# ────────────────────────────────────────────────────────────

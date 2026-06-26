@@ -1,0 +1,65 @@
+C:\Users\Biocomputing/.cache\torch\hub\facebookresearch_dinov2_main\dinov2\layers\swiglu_ffn.py:51: UserWarning: xFormers is not available (SwiGLU)
+  warnings.warn("xFormers is not available (SwiGLU)")
+C:\Users\Biocomputing/.cache\torch\hub\facebookresearch_dinov2_main\dinov2\layers\attention.py:33: UserWarning: xFormers is not available (Attention)
+  warnings.warn("xFormers is not available (Attention)")
+C:\Users\Biocomputing/.cache\torch\hub\facebookresearch_dinov2_main\dinov2\layers\block.py:40: UserWarning: xFormers is not available (Block)
+  warnings.warn("xFormers is not available (Block)")
+[INFO] Device: cuda  n_ch=32  max_sessions=None
+[INFO] Subjects (3): [1, 2, 18]
+[INFO] Loading DINO for generation eval: dinov2_vits14
+
+=======================================================
+  Subject 01  (sessions=10)
+  [dataset] SKIP S01 sess9: anomalous n_rep=108 (expected <=20), shape=(108, 3, 9, 4096, 40)
+  [dataset] S01  trials=1215  eff_sessions=9
+  [dataset] SKIP S01 sess9: anomalous n_rep=108 (expected <=20), shape=(108, 3, 9, 4096, 40)
+  [dataset] SKIP S01 sess9: anomalous n_rep=108 (expected <=20), shape=(108, 3, 9, 4096, 40)
+  [SupCon encoder] Loaded from checkpoints_vsre_dino/20260530_095045_ch32_merged_ep200_supcon\subj01_best.pt  (missing=[] unexpected=[])
+  [AntiCollapse] lambda_dino_align=0.1  lambda_aux_ce=0.1
+  S01  train=972  val=117  test=126
+    Ep    TrLoss   ValLoss
+    60   0.25099   0.00492
+   120   0.24307   0.00370
+   180   0.22877   0.00108
+   240   0.22083   0.00074
+   300   0.21974   0.00068
+C:\Users\Biocomputing\anaconda3\envs\eegdiff\Lib\site-packages\torchvision\models\_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+C:\Users\Biocomputing\anaconda3\envs\eegdiff\Lib\site-packages\torchvision\models\_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=VGG16_Weights.IMAGENET1K_V1`. You can also use `weights=VGG16_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+C:\Users\Biocomputing\anaconda3\envs\eegdiff\Lib\site-packages\lpips\lpips.py:107: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  self.load_state_dict(torch.load(model_path, map_location='cpu'), strict=False)
+Setting up [LPIPS] perceptual loss: trunk [vgg], v[0.1], spatial [off]
+Loading model from: C:\Users\Biocomputing\anaconda3\envs\eegdiff\Lib\site-packages\lpips\weights\v0.1\vgg.pth
+  [Done S01]  best val loss=0.00052  L1=0.82446  SSIM=0.0478  LPIPS=0.7804  DINO@1=0.1111  proto_sim=0.0509  margin=-0.2773  entropy=0.316  dominant=77.8%
+
+=======================================================
+  Subject 02  (sessions=9)
+  [dataset] S02  trials=1161  eff_sessions=9
+  [SupCon encoder] Loaded from checkpoints_vsre_dino/20260530_095045_ch32_merged_ep200_supcon\subj02_best.pt  (missing=[] unexpected=[])
+  [AntiCollapse] lambda_dino_align=0.1  lambda_aux_ce=0.1
+  S02  train=927  val=108  test=126
+    Ep    TrLoss   ValLoss
+    60   0.38193   0.00588
+   120   0.38446   0.00229
+   180   0.36833   0.00210
+   240   0.36310   0.00153
+   300   0.35713   0.00090
+  [Done S02]  best val loss=0.00069  L1=0.82562  SSIM=0.0578  LPIPS=0.7572  DINO@1=0.1111  proto_sim=0.0608  margin=-0.4597  entropy=0.000  dominant=100.0%
+
+=======================================================
+  Subject 18  (sessions=8)
+  [dataset] S18  trials=1080  eff_sessions=8
+  [SupCon encoder] Loaded from checkpoints_vsre_dino/20260530_095045_ch32_merged_ep200_supcon\subj18_best.pt  (missing=[] unexpected=[])
+  [AntiCollapse] lambda_dino_align=0.1  lambda_aux_ce=0.1
+  S18  train=864  val=108  test=108
+    Ep    TrLoss   ValLoss
+    60   0.23428   0.00698
+   120   0.19674   0.00364
+   180   0.18524   0.00202
+   240   0.17963   0.00164
+   300   0.17780   0.00147
+  [Done S18]  best val loss=0.00134  L1=0.81517  SSIM=0.0529  LPIPS=0.7705  DINO@1=0.1296  proto_sim=0.0786  margin=-0.3615  entropy=0.066  dominant=97.2%
+
+[INFO] All done. Results: ./checkpoints_vsre_gen\20260608_091209_ch32_merged_ep300_supcon_init
+[INFO] CSV: ./checkpoints_vsre_gen\20260608_091209_ch32_merged_ep300_supcon_init\results_gen.csv

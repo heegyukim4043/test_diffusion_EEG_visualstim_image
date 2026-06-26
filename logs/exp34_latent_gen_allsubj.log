@@ -1,0 +1,334 @@
+[INFO] Device: cuda  latent diffusion (SD VAE)  epochs=300
+[INFO] Subjects: [1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 16, 18, 19, 20, 21, 22, 23, 24, 28, 29, 35]
+[INFO] Loading SD VAE...
+[INFO] Loading DINO: dinov2_vits14
+C:\Users\Biocomputing/.cache/torch/hub\facebookresearch_dinov2_main\dinov2\layers\swiglu_ffn.py:51: UserWarning: xFormers is not available (SwiGLU)
+  warnings.warn("xFormers is not available (SwiGLU)")
+C:\Users\Biocomputing/.cache/torch/hub\facebookresearch_dinov2_main\dinov2\layers\attention.py:33: UserWarning: xFormers is not available (Attention)
+  warnings.warn("xFormers is not available (Attention)")
+C:\Users\Biocomputing/.cache/torch/hub\facebookresearch_dinov2_main\dinov2\layers\block.py:40: UserWarning: xFormers is not available (Block)
+  warnings.warn("xFormers is not available (Block)")
+
+=======================================================
+  Subject 01
+  [dataset] SKIP S01 sess9: anomalous n_rep=108 (expected <=20), shape=(108, 3, 9, 4096, 40)
+  [dataset] S01  trials=1215  eff_sessions=9
+  [dataset] SKIP S01 sess9: anomalous n_rep=108 (expected <=20), shape=(108, 3, 9, 4096, 40)
+  [dataset] SKIP S01 sess9: anomalous n_rep=108 (expected <=20), shape=(108, 3, 9, 4096, 40)
+  S01  train=972  val=117  test=126
+  [SupCon encoder] Loaded checkpoints_vsre_dino/20260604_091352_ch32_merged_ep200_supcon\subj01_best.pt
+  [EEG encoder] Frozen
+    Ep    TrLoss   ValLoss
+     60  0.03581  0.04469
+    120  0.02273  0.03410
+    180  0.02037  0.03650
+    240  0.02228  0.02596
+    300  0.01882  0.02937
+  [Done S01]  best_val=0.01600  DINO@1=0.3200  entropy=0.168  dominant=96.0%
+
+=======================================================
+  Subject 02
+  [dataset] S02  trials=1161  eff_sessions=9
+  S02  train=927  val=108  test=126
+  [SupCon encoder] Loaded checkpoints_vsre_dino/20260604_091352_ch32_merged_ep200_supcon\subj02_best.pt
+  [EEG encoder] Frozen
+    Ep    TrLoss   ValLoss
+     60  0.03938  0.04530
+    120  0.03060  0.03648
+    180  0.02386  0.03328
+    240  0.01919  0.02786
+    300  0.01812  0.03153
+  [Done S02]  best_val=0.01258  DINO@1=0.2600  entropy=0.098  dominant=98.0%
+
+=======================================================
+  Subject 03
+  [dataset] S03  trials=135  eff_sessions=1
+  S03  train=108  val=9  test=18
+  [SupCon encoder] Loaded checkpoints_vsre_dino/20260604_091352_ch32_merged_ep200_supcon\subj03_best.pt
+  [EEG encoder] Frozen
+    Ep    TrLoss   ValLoss
+     60  0.23987  0.18035
+    120  0.10496  0.05230
+    180  0.05981  0.03181
+    240  0.05187  0.03491
+    300  0.05486  0.02722
+  [Done S03]  best_val=0.01959  DINO@1=0.1111  entropy=1.120  dominant=55.6%
+
+=======================================================
+  Subject 04
+  [dataset] S04  trials=270  eff_sessions=2
+  S04  train=216  val=27  test=27
+  [SupCon encoder] Loaded checkpoints_vsre_dino/20260604_091352_ch32_merged_ep200_supcon\subj04_best.pt
+  [EEG encoder] Frozen
+    Ep    TrLoss   ValLoss
+     60  0.08522  0.07677
+    120  0.04901  0.14170
+    180  0.04117  0.03703
+    240  0.04574  0.03502
+    300  0.03101  0.02547
+  [Done S04]  best_val=0.01373  DINO@1=0.0370  entropy=0.754  dominant=77.8%
+
+=======================================================
+  Subject 05
+  [dataset] S05  trials=135  eff_sessions=1
+  S05  train=108  val=9  test=18
+  [SupCon encoder] Loaded checkpoints_vsre_dino/20260604_091352_ch32_merged_ep200_supcon\subj05_best.pt
+  [EEG encoder] Frozen
+    Ep    TrLoss   ValLoss
+     60  0.23962  0.17980
+    120  0.10271  0.05090
+    180  0.05935  0.03078
+    240  0.05112  0.03300
+    300  0.05451  0.02620
+  [Done S05]  best_val=0.01977  DINO@1=0.1111  entropy=1.051  dominant=66.7%
+
+=======================================================
+  Subject 06
+  [dataset] S06  trials=135  eff_sessions=1
+  S06  train=108  val=9  test=18
+  [SupCon encoder] Loaded checkpoints_vsre_dino/20260604_091352_ch32_merged_ep200_supcon\subj06_best.pt
+  [EEG encoder] Frozen
+    Ep    TrLoss   ValLoss
+     60  0.23928  0.17740
+    120  0.10384  0.05127
+    180  0.06024  0.03193
+    240  0.05159  0.03360
+    300  0.05403  0.02686
+  [Done S06]  best_val=0.01988  DINO@1=0.1111  entropy=0.961  dominant=72.2%
+
+=======================================================
+  Subject 08
+  [dataset] S08  trials=81  eff_sessions=1
+  S08  train=63  val=0  test=18
+  [SupCon encoder] Loaded checkpoints_vsre_dino/20260604_091352_ch32_merged_ep200_supcon\subj08_best.pt
+  [EEG encoder] Frozen
+    Ep    TrLoss   ValLoss
+     60  0.35334  0.00000
+    120  0.18433  0.00000
+    180  0.10105  0.00000
+    240  0.07488  0.00000
+    300  0.06730  0.00000
+  [Done S08]  best_val=0.00000  DINO@1=0.0556  entropy=0.868  dominant=66.7%
+
+=======================================================
+  Subject 09
+  [dataset] S09  trials=513  eff_sessions=4
+  S09  train=405  val=45  test=63
+  [SupCon encoder] Loaded checkpoints_vsre_dino/20260604_091352_ch32_merged_ep200_supcon\subj09_best.pt
+  [EEG encoder] Frozen
+    Ep    TrLoss   ValLoss
+     60  0.06004  0.12842
+    120  0.02982  0.06562
+    180  0.02983  0.07158
+    240  0.03386  0.04656
+    300  0.02463  0.03279
+  [Done S09]  best_val=0.02259  DINO@1=0.2000  entropy=1.275  dominant=56.0%
+
+=======================================================
+  Subject 10
+  [dataset] S10  trials=270  eff_sessions=2
+  S10  train=216  val=27  test=27
+  [SupCon encoder] Loaded checkpoints_vsre_dino/20260604_091352_ch32_merged_ep200_supcon\subj10_best.pt
+  [EEG encoder] Frozen
+    Ep    TrLoss   ValLoss
+     60  0.08423  0.10525
+    120  0.05155  0.21386
+    180  0.04051  0.08828
+    240  0.04567  0.10379
+    300  0.03040  0.10430
+  [Done S10]  best_val=0.04560  DINO@1=0.0741  entropy=1.838  dominant=25.9%
+
+=======================================================
+  Subject 11
+  [dataset] S11  trials=135  eff_sessions=1
+  S11  train=108  val=9  test=18
+  [SupCon encoder] Loaded checkpoints_vsre_dino/20260604_091352_ch32_merged_ep200_supcon\subj11_best.pt
+  [EEG encoder] Frozen
+    Ep    TrLoss   ValLoss
+     60  0.23722  0.18286
+    120  0.10619  0.06285
+    180  0.06077  0.04655
+    240  0.05019  0.05374
+    300  0.05350  0.05899
+  [Done S11]  best_val=0.03606  DINO@1=0.2222  entropy=1.480  dominant=33.3%
+
+=======================================================
+  Subject 16
+  [dataset] S16  trials=243  eff_sessions=2
+  S16  train=189  val=18  test=36
+  [SupCon encoder] Loaded checkpoints_vsre_dino/20260604_091352_ch32_merged_ep200_supcon\subj16_best.pt
+  [EEG encoder] Frozen
+    Ep    TrLoss   ValLoss
+     60  0.11134  0.11116
+    120  0.07159  0.05738
+    180  0.05120  0.06633
+    240  0.03100  0.04557
+    300  0.02765  0.05871
+  [Done S16]  best_val=0.02293  DINO@1=0.1667  entropy=1.399  dominant=41.7%
+
+=======================================================
+  Subject 18
+  [dataset] S18  trials=1080  eff_sessions=8
+  S18  train=864  val=108  test=108
+  [SupCon encoder] Loaded checkpoints_vsre_dino/20260604_091352_ch32_merged_ep200_supcon\subj18_best.pt
+  [EEG encoder] Frozen
+    Ep    TrLoss   ValLoss
+     60  0.03886  0.06893
+    120  0.03016  0.04246
+    180  0.02091  0.05592
+    240  0.01690  0.02320
+    300  0.01498  0.02668
+  [Done S18]  best_val=0.01452  DINO@1=0.2400  entropy=-0.000  dominant=100.0%
+
+=======================================================
+  Subject 19
+  [dataset] S19  trials=189  eff_sessions=2
+  S19  train=144  val=18  test=27
+  [SupCon encoder] Loaded checkpoints_vsre_dino/20260604_091352_ch32_merged_ep200_supcon\subj19_best.pt
+  [EEG encoder] Frozen
+    Ep    TrLoss   ValLoss
+     60  0.17322  0.13217
+    120  0.07381  0.03698
+    180  0.05384  0.07692
+    240  0.04877  0.03453
+    300  0.04172  0.04342
+  [Done S19]  best_val=0.01815  DINO@1=0.1111  entropy=0.158  dominant=96.3%
+
+=======================================================
+  Subject 20
+  [dataset] S20  trials=135  eff_sessions=1
+  S20  train=108  val=9  test=18
+  [SupCon encoder] Loaded checkpoints_vsre_dino/20260604_091352_ch32_merged_ep200_supcon\subj20_best.pt
+  [EEG encoder] Frozen
+    Ep    TrLoss   ValLoss
+     60  0.23876  0.18060
+    120  0.10313  0.05327
+    180  0.05926  0.03213
+    240  0.05235  0.03798
+    300  0.05470  0.02854
+  [Done S20]  best_val=0.02053  DINO@1=0.1111  entropy=1.226  dominant=55.6%
+
+=======================================================
+  Subject 21
+  [dataset] S21  trials=135  eff_sessions=1
+  S21  train=108  val=9  test=18
+  [SupCon encoder] Loaded checkpoints_vsre_dino/20260604_091352_ch32_merged_ep200_supcon\subj21_best.pt
+  [EEG encoder] Frozen
+    Ep    TrLoss   ValLoss
+     60  0.23701  0.18219
+    120  0.10387  0.05801
+    180  0.06006  0.04218
+    240  0.05116  0.05417
+    300  0.05405  0.03797
+  [Done S21]  best_val=0.02954  DINO@1=0.1111  entropy=1.567  dominant=27.8%
+
+=======================================================
+  Subject 22
+  [dataset] S22  trials=135  eff_sessions=1
+  S22  train=108  val=9  test=18
+  [SupCon encoder] Loaded checkpoints_vsre_dino/20260604_091352_ch32_merged_ep200_supcon\subj22_best.pt
+  [EEG encoder] Frozen
+    Ep    TrLoss   ValLoss
+     60  0.23823  0.18055
+    120  0.10470  0.05169
+    180  0.05964  0.03027
+    240  0.05216  0.03406
+    300  0.05497  0.02664
+  [Done S22]  best_val=0.02006  DINO@1=0.1111  entropy=0.961  dominant=72.2%
+
+=======================================================
+  Subject 23
+  [dataset] S23  trials=135  eff_sessions=1
+  S23  train=108  val=9  test=18
+  [SupCon encoder] Loaded checkpoints_vsre_dino/20260604_091352_ch32_merged_ep200_supcon\subj23_best.pt
+  [EEG encoder] Frozen
+    Ep    TrLoss   ValLoss
+     60  0.23790  0.18074
+    120  0.10415  0.05218
+    180  0.05975  0.03200
+    240  0.05249  0.03639
+    300  0.05428  0.02888
+  [Done S23]  best_val=0.02045  DINO@1=0.1111  entropy=1.080  dominant=66.7%
+
+=======================================================
+  Subject 24
+  [dataset] S24  trials=1350  eff_sessions=10
+  S24  train=1080  val=135  test=135
+  [SupCon encoder] Loaded checkpoints_vsre_dino/20260604_091352_ch32_merged_ep200_supcon\subj24_best.pt
+  [EEG encoder] Frozen
+    Ep    TrLoss   ValLoss
+     60  0.03646  0.04112
+    120  0.02373  0.03749
+    180  0.02347  0.02560
+    240  0.02202  0.03990
+    300  0.01371  0.02542
+  [Done S24]  best_val=0.01365  DINO@1=0.2800  entropy=0.265  dominant=94.0%
+
+=======================================================
+  Subject 28
+  [dataset] S28  trials=783  eff_sessions=6
+  S28  train=621  val=72  test=90
+  [SupCon encoder] Loaded checkpoints_vsre_dino/20260604_091352_ch32_merged_ep200_supcon\subj28_best.pt
+  [EEG encoder] Frozen
+    Ep    TrLoss   ValLoss
+     60  0.05337  0.10082
+    120  0.02874  0.04022
+    180  0.02369  0.03123
+    240  0.02715  0.04751
+    300  0.02114  0.02341
+  [Done S28]  best_val=0.01318  DINO@1=0.1800  entropy=0.265  dominant=94.0%
+
+=======================================================
+  Subject 29
+  [dataset] S29  trials=675  eff_sessions=5
+  S29  train=540  val=63  test=72
+  [SupCon encoder] Loaded checkpoints_vsre_dino/20260604_091352_ch32_merged_ep200_supcon\subj29_best.pt
+  [EEG encoder] Frozen
+    Ep    TrLoss   ValLoss
+     60  0.04498  0.08177
+    120  0.03228  0.10501
+    180  0.02486  0.06195
+    240  0.02297  0.11459
+    300  0.02136  0.03994
+  [Done S29]  best_val=0.02909  DINO@1=0.2200  entropy=0.906  dominant=72.0%
+
+=======================================================
+  Subject 35
+  [dataset] S35  trials=297  eff_sessions=2
+  S35  train=234  val=27  test=36
+  [SupCon encoder] Loaded checkpoints_vsre_dino/20260604_091352_ch32_merged_ep200_supcon\subj35_best.pt
+  [EEG encoder] Frozen
+    Ep    TrLoss   ValLoss
+     60  0.08705  0.07197
+    120  0.04862  0.09146
+    180  0.03386  0.02115
+    240  0.03351  0.03020
+    300  0.02929  0.05231
+  [Done S35]  best_val=0.01435  DINO@1=0.1111  entropy=1.088  dominant=69.4%
+
+=======================================================
+Summary
+   Subj   DINO@1   entropy   dominant
+  S01     0.3200     0.168      96.0%
+  S02     0.2600     0.098      98.0%
+  S03     0.1111     1.120      55.6%
+  S04     0.0370     0.754      77.8%
+  S05     0.1111     1.051      66.7%
+  S06     0.1111     0.961      72.2%
+  S08     0.0556     0.868      66.7%
+  S09     0.2000     1.275      56.0%
+  S10     0.0741     1.838      25.9%
+  S11     0.2222     1.480      33.3%
+  S16     0.1667     1.399      41.7%
+  S18     0.2400    -0.000     100.0%
+  S19     0.1111     0.158      96.3%
+  S20     0.1111     1.226      55.6%
+  S21     0.1111     1.567      27.8%
+  S22     0.1111     0.961      72.2%
+  S23     0.1111     1.080      66.7%
+  S24     0.2800     0.265      94.0%
+  S28     0.1800     0.265      94.0%
+  S29     0.2200     0.906      72.0%
+  S35     0.1111     1.088      69.4%
+  Mean    0.1550     0.882      68.5%
+[INFO] Saved: ./checkpoints_vsre_latent_gen\20260609_173254_ch32_ep300_supcon_frozen

@@ -1,0 +1,4 @@
+subject,session,status,file,exists,shape,n_rep,n_blk,n_cls,n_time,n_ch_all,total_trials,per_class,finite_frac,mean,std
+S11,1,ok,preproc_vs_re\preproc_subj_11_1.mat,True,"(5, 3, 9, 4096, 40)",5,3,9,4096,40,135,15;15;15;15;15;15;15;15;15,1.0,-0.11526107788085938,9.318746566772461
+S16,1,ok,preproc_vs_re\preproc_subj_16_1.mat,True,"(5, 3, 9, 4096, 40)",5,3,9,4096,40,135,15;15;15;15;15;15;15;15;15,1.0,-0.11393716931343079,11.162359237670898
+S16,2,ok,preproc_vs_re\preproc_subj_16_2.mat,True,"(4, 3, 9, 4096, 40)",4,3,9,4096,40,108,12;12;12;12;12;12;12;12;12,1.0,-0.07672065496444702,12.142045021057129

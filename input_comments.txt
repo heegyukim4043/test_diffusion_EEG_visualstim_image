@@ -1,0 +1,238 @@
+Origin
+
+python train_subject.py --data_root ./preproc_data --subject_id 2 --epochs 200 --batch_size 8 --img_size 64
+python train_subject.py --data_root ./preproc_data --subject_id 3 --epochs 200 --batch_size 8 --img_size 128
+python train_subject.py --data_root ./preproc_data --subject_ids 1,2,3,4,5,6,7,8,9,10 --epochs 300 --batch_size 8 --img_size 512
+
+python train_subject.py --data_root ./preproc_data --subject_id 1 --epochs 100 --batch_size 4 --img_size 128
+python sample_subject_all.py --data_root ./preproc_data --subject_id 1 --split_ratio 0.9 --img_size 128
+python sample_subject_all.py --data_root ./preproc_data --subject_id 2 --split_ratio 0.9 --img_size 64
+
+python sample_subject_all.py --data_root ./preproc_data --subject_id 1 --split_ratio 0.9 --img_size 512
+python sample_subject_all.py --data_root ./preproc_data --subject_id 3 --split_ratio 0.9 --img_size 128
+python sample_subject.py --data_root ./preproc_data --subject_id 1 --batch_size 8 --split_ratio 0.9 --img_size 512
+
+
+---
+Segment
+python train_subject_segments.py --data_root ./preproc_data --subject_id 1 --epochs 300 --batch_size 8 --img_size 512
+
+python train_subject_segments.py --data_root ./preproc_data --subject_id 1 --epochs 5 --batch_size 8
+python sample_subject_segments_all.py --data_root ./preproc_data --subject_id 1 --batch_size 8
+
+
+---
+Explainable
+
+python eeg_shap_explain.py --data_root ./preproc_data --subject_id 1
+
+
+---
+zero shot
+
+python train_subject_zero_shot.py --data_root ./preproc_data --subject_id 1 --held_out_class 9 --epochs 300 --batch_size 8
+python sample_subject_heldout.py --data_root ./preproc_data --subject_id 1 --held_out_class 9
+
+---
+python train_subject_128.py --data_root ./preproc_data --subject_ids 1,2,3 --epochs 200 --batch_size 32
+python train_subject_128.py --data_root ./preproc_data --subject_ids 4 --epochs 200 --batch_size 32
+python sample_subject_128.py --data_root ./preproc_data --subject_id 4 --trial_index 0
+
+
+
+python train_subject_128.py --data_root ./preproc_data --subject_ids 7 --epochs 200 --batch_size 32
+python sample_subject_all_128.py     --data_root ./preproc_data     --subject_id 7     --split_ratio 0.9     --img_size 128
+
+
+----
+python train_multi_subject_128.py     --data_root ./preproc_data     --train_subject_ids 1-10     --epochs 200     --batch_size 64
+python sample_unseen_subject_128.py     --data_root ./preproc_data     --train_subject_ids 1-10     --test_subject_id 11     --img_size 128
+
+___
+python train_multi_subject_128_2.py     --data_root ./preproc_data     --train_subject_ids 1-10     --epochs 200     --batch_size 64     --cfg_scale 1.8     --lambda_x0 0.1
+
+python sample_unseen_subject_128_2.py     --data_root ./preproc_data     --train_subject_ids 1-10     --test_subject_id 11     --cfg_scale 1.5     --ckpt_root ./checkpoints_multi128_2
+
+----
+python train_subject_128_group3.py     --data_root ./preproc_data     --subject_ids 7     --epochs 200     --batch_size 16     --img_size 128     --base_channels 64     --ch_mult 1,2,4,8
+python sample_subject_all_group_128.py     --data_root ./preproc_data     --subject_id 7     --group_id 1     --img_size 128    --sample_steps 200 
+
+_____________________________
+lambda = 0
+python train_subject_128_group3.py     --data_root ./preproc_data     --subject_ids 8     --epochs 200     --batch_size 16     --img_size 128     --base_channels 64     --ch_mult 1,2,4,8 
+python sample_subject_all_group_128.py     --data_root ./preproc_data     --subject_id 8     --group_id 1     --img_size 128    --sample_steps 200 
+
+
+
+lambda = 0.02
+python train_subject_128_group3.py     --data_root ./preproc_data     --subject_ids 9     --epochs 200     --batch_size 16     --img_size 128     --base_channels 64     --ch_mult 1,2,4,8 
+python sample_subject_all_group_128.py     --data_root ./preproc_data     --subject_id 9    --group_id 1     --img_size 128    --sample_steps 200 
+
+
+lambda = 0.05
+python train_subject_128_group3.py     --data_root ./preproc_data     --subject_ids 10   --epochs 200     --batch_size 16     --img_size 128     --base_channels 64     --ch_mult 1,2,4,8 
+python sample_subject_all_group_128.py     --data_root ./preproc_data     --subject_id 10    --group_id 1     --img_size 128    --sample_steps 200 
+
+_____________________________
+lambda = 0.02
+guidance_scale = 3
+python train_subject_128_group3.py     --data_root ./preproc_data     --subject_ids 11     --epochs 200     --batch_size 16     --img_size 128     --base_channels 64     --ch_mult 1,2,4,8 
+python sample_subject_all_group_128.py     --data_root ./preproc_data     --subject_id 11     --group_id 1     --img_size 128    --sample_steps 200 
+
+
+
+guidance_scale = 2.5
+python train_subject_128_group3.py     --data_root ./preproc_data     --subject_ids 12     --epochs 200     --batch_size 16     --img_size 128     --base_channels 64     --ch_mult 1,2,4,8 
+python sample_subject_all_group_128.py     --data_root ./preproc_data     --subject_id 12    --group_id 1     --img_size 128    --sample_steps 200 
+
+
+guidance_scale = 2
+python train_subject_128_group3.py     --data_root ./preproc_data     --subject_ids 13   --epochs 200     --batch_size 16     --img_size 128     --base_channels 64     --ch_mult 1,2,4,8 
+python sample_subject_all_group_128.py     --data_root ./preproc_data     --subject_id 13    --group_id 1     --img_size 128    --sample_steps 200 
+
+
+---------------------------
+lambda = 0.02 
+guidance_scale = 2.5
+
+python train_subject_128_group3.py     --data_root ./preproc_data     --subject_ids 14     --epochs 200     --batch_size 16     --img_size 128     --base_channels 128     --ch_mult 1,2,4,8   --n_res_blocks 5  --num_timesteps 500
+python sample_subject_all_group_128.py     --data_root ./preproc_data     --subject_id 14    --group_id 1     --img_size 128    --sample_steps 200 
+
+---------------------------
+lambda = 0.02 
+guidance_scale = 2.5
+
+python train_subject_128_group3.py     --data_root ./preproc_data     --subject_ids 14     --epochs 200     --batch_size 16     --img_size 128     --base_channels 128     --ch_mult 1,2,4,8   --n_res_blocks 5  --num_timesteps 500
+python sample_subject_all_group_128.py     --data_root ./preproc_data     --subject_id 14    --group_id 1     --img_size 128    --sample_steps 200 
+
+
+
+python run_sample_subject_group_range.py --data_root ./preproc_data --subjects 2,3,4 --groups 1,2,3 --sample_steps 500
+
+
+------
+lambda = 0.02 
+guidance_scale = 2.5
+python train_subject_128_group3.py     --data_root ./preproc_data     --subject_ids 15     --epochs 200     --batch_size 16     --img_size 128     --base_channels 128     --ch_mult 1,2,4,8   --n_res_blocks 7  --num_timesteps 500
+python sample_subject_all_group_128.py     --data_root ./preproc_data     --subject_id 15    --group_id 1     --img_size 128    --sample_steps 500 
+
+
+
+__
+lambda = 0.00
+guidance_scale = 2.5
+python train_subject_128_group3.py     --data_root ./preproc_data     --subject_ids 16     --epochs 200     --batch_size 16     --img_size 128     --base_channels 128     --ch_mult 1,2,4,8   --n_res_blocks 7  --num_timesteps 275  --lambda_rec 0.00
+python sample_subject_all_group_128.py     --data_root ./preproc_data     --subject_id 16    --group_id 1     --img_size 128    --sample_steps 500 
+
+
+---
+ema 수정
+
+python train_subject_128_group3_cfg_ddim.py --data_root ./preproc_data --subject_ids 14 --epochs 200 --batch_size 16 --img_size 128 --base_channels 128 --ch_mult 1,2,4,8 --n_res_blocks 5 --num_timesteps 500 --cond_drop_prob 0.1
+
+python sample_subject_all_group_128_cfg_ddim.py --data_root ./preproc_data --subject_id 14 --group_id 1 --img_size 128 --sample_steps 200 --guidance_scale 2.5 --ddim_eta 0.0
+
+
+python train_subject_128_group3.py --data_root ./preproc_data --subject_ids 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20 --epochs 200 --batch_size 16 --img_size 128 --base_channels 128 --ch_mult 1,2,4,8 --n_res_blocks 5 --num_timesteps 500
+
+
+
+
+--
+repa
+
+python sample_vi_repa_allclass.py --subject_ids 1-10
+
+--
+python train_vi_repa_allclass.py --subject_ids 1-10
+python train_vs_test_vi.py --vs_subjects 1-10 --vi_subjects 1-10
+
+python sample_vi_repa_allclass.py   --subject_ids 1-10     --ckpt_path ./checkpoints_vi_repa_9cls/20260303_100907_subj01-10_9cls_128/best.pt     --split all --use_ddim --sample_steps 50
+
+---
+# 피험자 1-15, 그룹 1(cls 1-3), 2(cls 4-6), 3(cls 7-9) 각각 독립 모델
+python train_vi_repa_allclass.py --subject_ids 1 --group_ids 1,2,3 --n_res_blocks 5
+
+# 그룹 1만 먼저 돌리고 싶을 때
+python train_vi_repa_allclass.py --subject_ids 1-15 --group_ids 1
+
+# 기존 9-class 방식 유지 (group_ids=0)
+python train_vi_repa_allclass.py --subject_ids 1-15 --group_ids 0
+
+
+
+# 학습된 그룹 모델로 생성 (자동 탐색)
+python sample_vi_repa_allclass.py --subject_ids 1-15 --group_ids 1,2,3 --use_ddim --sample_steps 50
+
+# 그룹 2만
+python sample_vi_repa_allclass.py --subject_ids 1-15 --group_ids 2 --use_ddim --sample_steps 50
+
+
+
+train_vi_repa_allclass.py
+train_vs_test_vi.py
+train_rest_pretrain_vi_finetune.py
+sample_vi_repa_allclass.py
+
+
+python sample_vi_repa_allclass.py --subject_ids 1 --group_ids 0  --use_ddim --sample_steps 250 --guidance_scale 3.0
+
+
+# 학습 (subj 1~10, 그룹 1~3)
+python train_vs_repa_allclass.py --subject_ids 1 --group_ids 1,2,3 --epochs 250
+
+# 샘플링 (DDIM, test set)
+python sample_vs_repa_allclass.py --subject_ids 1-10 --group_ids 1,2,3 --use_ddim --sample_steps 50 --guidance_scale 3.0
+
+# 9-class 전체 모드
+python train_vs_repa_allclass.py --subject_ids 1 --group_ids 0
+python sample_vs_repa_allclass.py --subject_ids 1 --group_ids 1,2,3
+
+
+
+---
+
+# VS로 학습 후 REST 이미지 생성 (subj 1~15, 그룹 1~3)
+python train_vs_test_rest.py --subjects 1 --group_ids 1,2,3 --epochs 250
+
+# DDIM 사용
+python train_vs_test_rest.py --subjects 1-15 --group_ids 1,2,3 \
+    --use_ddim --sample_steps 50 --guidance_scale 3.0
+
+# 이미 학습된 VS 모델로 REST 생성만
+python train_vs_test_rest.py --subjects 1 --group_ids 1     --skip_train --ckpt_path ./checkpoints_vs2rest/20260311_202245_vs01_g1_cls1-3_128/best.pt     --use_ddim --sample_steps 500
+
+# 학습만 (REST 생성 나중에)
+python train_vs_test_rest.py --subjects 1-15 --group_ids 1,2,3 --skip_test
+---
+augmentation
+# 더 강하게
+python train_vs_repa_allclass.py --subject_ids 1 --group_ids 1,2,3     --aug_noise_std 0.05 --aug_scale_min 0.7 --aug_scale_max 2.0     --aug_ch_drop_p 0.15 --aug_time_shift 30
+
+# 비활성화
+python train_vs_repa_allclass.py --subject_ids 1 --group_ids 1,2,3 \
+    --aug_noise_std 0 --aug_scale_min 1.0 --aug_scale_max 1.0 \
+    --aug_ch_drop_p 0 --aug_time_shift 0
+
+
+    python sample_vs_repa_allclass.py --subject_ids 1-3 --group_ids 1     --use_ddim --sample_steps 50 --guidance_scale 1.5
+
+
+conda run -n eegdiff --no-capture-output python .\dataset_vs_re.py .\preproc_vs_re
+conda run -n eegdiff --no-capture-output python .\train_vs_re_dino.py --subject_ids all --epochs 200
+conda run -n eegdiff --no-capture-output python .\train_vs_re_dino.py --subject_ids all --max_sessions 2 --epochs 200
+conda run -n eegdiff --no-capture-output python .\train_vs_re_dino.py --subject_ids all --temperature 0.07 --batch_size 96 --epochs 200
+conda run -n eegdiff --no-capture-output python .\train_vs_re_gen.py --subject_ids all --epochs 300
+conda run -n eegdiff --no-capture-output python .\train_vs_re_gen.py --subject_ids all --sample_ddim_steps 200 --eval_ddim_steps 200 --guidance_scale 3.0 --epochs 300
+conda run -n eegdiff --no-capture-output python .\train_vs_re_gen.py --subject_ids all --max_sessions 2 --sample_ddim_steps 200 --eval_ddim_steps 200 --guidance_scale 3.0 --epochs 300
+
+
+conda run -n eegdiff --no-capture-output python .\train_vs_re_gen.py --subject_ids all --epochs 300 --beta_schedule cosine --lambda_lpips 0.05 --eval_ddim_steps 50 --guidance_scale 1.5 --eta 0.0
+
+
+$env:PYTHONIOENCODING='utf-8'
+conda run -n eegdiff --no-capture-output python .\train_vs_re_gen.py --subject_ids all --epochs 300 --beta_schedule cosine --lambda_lpips 0.0 --lambda_percept 0.1 --lambda_rec 0.01 --guidance_scale 1.5 --eta 0.0 --eval_ddim_steps 50 *> .\logs\vsre_gen_stepA_cosine_only.log
+conda run -n eegdiff --no-capture-output python .\train_vs_re_gen.py --subject_ids all --epochs 300 --beta_schedule linear --lambda_lpips 0.01 --lambda_percept 0.1 --lambda_rec 0.01 --guidance_scale 1.5 --eta 0.0 --eval_ddim_steps
+
+
+conda run -n eegdiff --no-capture-output python .\train_vs_re_gen.py --subject_ids all --epochs 300 --encoder_version v2

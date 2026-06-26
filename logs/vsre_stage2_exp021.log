@@ -1,0 +1,51 @@
+C:\Users\Biocomputing/.cache\torch\hub\facebookresearch_dinov2_main\dinov2\layers\swiglu_ffn.py:51: UserWarning: xFormers is not available (SwiGLU)
+  warnings.warn("xFormers is not available (SwiGLU)")
+C:\Users\Biocomputing/.cache\torch\hub\facebookresearch_dinov2_main\dinov2\layers\attention.py:33: UserWarning: xFormers is not available (Attention)
+  warnings.warn("xFormers is not available (Attention)")
+C:\Users\Biocomputing/.cache\torch\hub\facebookresearch_dinov2_main\dinov2\layers\block.py:40: UserWarning: xFormers is not available (Block)
+  warnings.warn("xFormers is not available (Block)")
+C:\Users\Biocomputing\anaconda3\envs\eegdiff\Lib\site-packages\torchvision\models\_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+C:\Users\Biocomputing\anaconda3\envs\eegdiff\Lib\site-packages\torchvision\models\_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=VGG16_Weights.IMAGENET1K_V1`. You can also use `weights=VGG16_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+C:\Users\Biocomputing\anaconda3\envs\eegdiff\Lib\site-packages\lpips\lpips.py:107: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  self.load_state_dict(torch.load(model_path, map_location='cpu'), strict=False)
+[INFO] Stage 2 readout eval  device=cuda
+[INFO] Checkpoint: checkpoints_vsre_dino/20260427_095215_ch32_merged_ep200
+  proto_dino: torch.Size([9, 384])
+  class_imgs: torch.Size([9, 3, 128, 128])
+Setting up [LPIPS] perceptual loss: trunk [vgg], v[0.1], spatial [off]
+Loading model from: C:\Users\Biocomputing\anaconda3\envs\eegdiff\Lib\site-packages\lpips\weights\v0.1\vgg.pth
+  LPIPS: enabled (vgg)
+
+=======================================================
+  Subject 01  (sessions=10)
+  [dataset] SKIP S01 sess9: anomalous n_rep=108 (expected <=20), shape=(108, 3, 9, 4096, 40)
+  test=126 trials
+  [Stage2 S01]  Top-1=0.3333  Top-3=0.6111  Top-5=0.8016  SSIM=0.7013  LPIPS=0.3083
+
+=======================================================
+  Subject 02  (sessions=9)
+  test=126 trials
+  [Stage2 S02]  Top-1=0.2063  Top-3=0.5397  Top-5=0.7381  SSIM=0.6586  LPIPS=0.3560
+
+=======================================================
+  Subject 18  (sessions=8)
+  test=108 trials
+  [Stage2 S18]  Top-1=0.2778  Top-3=0.5648  Top-5=0.8056  SSIM=0.6756  LPIPS=0.3384
+
+=======================================================
+  Stage 2 Readout Summary (Exp021)
+   Subj    Top-1    Top-3    Top-5     SSIM    LPIPS
+  --------------------------------------------------
+  S01     0.3333   0.6111   0.8016   0.7013   0.3083
+  S02     0.2063   0.5397   0.7381   0.6586   0.3560
+  S18     0.2778   0.5648   0.8056   0.6756   0.3384
+  --------------------------------------------------
+  Mean    0.2725   0.5719   0.7817   0.6785   0.3342
+  Random  0.1111
+
+  [vs Gen Probe Exp018]  Exp018 mean DINO@1=0.1138  (Stage2 = 0.2725)
+  [vs DINO Exp010]       Exp010 mean Top-1=0.2824   (Stage2 = 0.2725)
+
+[INFO] Saved: checkpoints_vsre_dino/20260427_095215_ch32_merged_ep200\stage2_readout_results.csv

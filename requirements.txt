@@ -1,0 +1,18 @@
+# 숫자 계산 / 배열
+numpy>=1.24
+scipy>=1.10
+
+# PyTorch (GPU 또는 CPU, 설치할 때 CUDA 인덱스로 조절)
+torch>=2.2
+torchvision>=0.17
+torchaudio>=2.2
+
+# 이미지 처리
+Pillow>=9.5
+kornia>=0.7
+
+# vision transformer 등 (나중에 확장용)
+timm>=0.9
+
+# 편의 기능
+tqdm>=4.66

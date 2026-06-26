@@ -1,0 +1,25 @@
+[INFO] Loading DINO...
+C:\Users\Biocomputing/.cache/torch/hub\facebookresearch_dinov2_main\dinov2\layers\swiglu_ffn.py:51: UserWarning: xFormers is not available (SwiGLU)
+  warnings.warn("xFormers is not available (SwiGLU)")
+C:\Users\Biocomputing/.cache/torch/hub\facebookresearch_dinov2_main\dinov2\layers\attention.py:33: UserWarning: xFormers is not available (Attention)
+  warnings.warn("xFormers is not available (Attention)")
+C:\Users\Biocomputing/.cache/torch/hub\facebookresearch_dinov2_main\dinov2\layers\block.py:40: UserWarning: xFormers is not available (Block)
+  warnings.warn("xFormers is not available (Block)")
+[INFO] Loading SD VAE...
+[INFO] Gallery images per class: {1: 2, 2: 2, 3: 2, 4: 2, 5: 2, 6: 2, 7: 2, 8: 2, 9: 2}
+  Gallery 'single': 9 images total
+  Gallery 'dual': 18 images total
+  Gallery 'augmented': 72 images total
+
+=== S18 (test n=108) ===
+  Gallery 'single    ': DINO@1=0.1944 @3=0.3796 @5=0.6296  dominant=37.0%  entropy=1.781
+  Gallery 'dual      ': DINO@1=0.2315 @3=0.4444 @5=0.6481  dominant=32.4%  entropy=1.831
+  Gallery 'augmented ': DINO@1=0.2315 @3=0.4537 @5=0.6111  dominant=31.5%  entropy=1.795
+  [dataset] SKIP S01 sess9: anomalous n_rep=108 (expected <=20), shape=(108, 3, 9, 4096, 40)
+
+=== S01 (test n=126) ===
+  Gallery 'single    ': DINO@1=0.1190 @3=0.3651 @5=0.5714  dominant=89.7%  entropy=0.360
+  Gallery 'dual      ': DINO@1=0.1349 @3=0.3095 @5=0.5873  dominant=83.3%  entropy=0.514
+  Gallery 'augmented ': DINO@1=0.1508 @3=0.3968 @5=0.6746  dominant=84.9%  entropy=0.626
+
+[INFO] Saved: checkpoints_vsre_latent_gen/20260610_105755_ch32_ep300_supcon_frozen_ca\exp39_multigallery_results.csv

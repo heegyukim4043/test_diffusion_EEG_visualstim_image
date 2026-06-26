@@ -51,3 +51,4 @@ vsvi_project_backup_20260617.log
 .idea/
 .vscode/
 *.DS_Store
+.claude/

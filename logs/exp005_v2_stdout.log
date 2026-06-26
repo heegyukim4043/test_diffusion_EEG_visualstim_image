@@ -1,0 +1,53 @@
+C:\Users\Biocomputing/.cache\torch\hub\facebookresearch_dinov2_main\dinov2\layers\swiglu_ffn.py:51: UserWarning: xFormers is not available (SwiGLU)
+  warnings.warn("xFormers is not available (SwiGLU)")
+C:\Users\Biocomputing/.cache\torch\hub\facebookresearch_dinov2_main\dinov2\layers\attention.py:33: UserWarning: xFormers is not available (Attention)
+  warnings.warn("xFormers is not available (Attention)")
+C:\Users\Biocomputing/.cache\torch\hub\facebookresearch_dinov2_main\dinov2\layers\block.py:40: UserWarning: xFormers is not available (Block)
+  warnings.warn("xFormers is not available (Block)")
+[INFO] Device: cuda  n_ch=32  max_sessions=None
+[INFO] Subjects (3): [1, 2, 18]
+[INFO] Loading DINO for generation eval: dinov2_vits14
+
+=======================================================
+  Subject 01  (sessions=8)
+  S01  train=864  val=108  test=108
+    Ep    TrLoss   ValLoss
+    60   0.00488   0.00469
+   120   0.00148   0.00142
+   180   0.00083   0.00075
+   240   0.00061   0.00072
+   300   0.00049   0.00052
+C:\Users\Biocomputing\anaconda3\envs\eegdiff\Lib\site-packages\torchvision\models\_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+C:\Users\Biocomputing\anaconda3\envs\eegdiff\Lib\site-packages\torchvision\models\_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=VGG16_Weights.IMAGENET1K_V1`. You can also use `weights=VGG16_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+C:\Users\Biocomputing\anaconda3\envs\eegdiff\Lib\site-packages\lpips\lpips.py:107: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  self.load_state_dict(torch.load(model_path, map_location='cpu'), strict=False)
+Setting up [LPIPS] perceptual loss: trunk [vgg], v[0.1], spatial [off]
+Loading model from: C:\Users\Biocomputing\anaconda3\envs\eegdiff\Lib\site-packages\lpips\weights\v0.1\vgg.pth
+  [Done S01]  best val loss=0.00043  L1=0.83098  SSIM=0.0436  LPIPS=0.7744  DINO@1=0.1019
+
+=======================================================
+  Subject 02  (sessions=5)
+  S02  train=540  val=63  test=72
+    Ep    TrLoss   ValLoss
+    60   0.00761   0.00644
+   120   0.00260   0.00254
+   180   0.00148   0.00140
+   240   0.00089   0.00084
+   300   0.00083   0.00089
+  [Done S02]  best val loss=0.00069  L1=0.83635  SSIM=0.0363  LPIPS=0.7646  DINO@1=0.1250
+
+=======================================================
+  Subject 18  (sessions=8)
+  S18  train=864  val=108  test=108
+    Ep    TrLoss   ValLoss
+    60   0.00470   0.00383
+   120   0.00166   0.00147
+   180   0.00090   0.00085
+   240   0.00061   0.00075
+   300   0.00049   0.00052
+  [Done S18]  best val loss=0.00042  L1=0.83306  SSIM=0.0445  LPIPS=0.7779  DINO@1=0.1204
+
+[INFO] All done. Results: ./checkpoints_vsre_gen\20260416_185126_ch32_merged_ep300
+[INFO] CSV: ./checkpoints_vsre_gen\20260416_185126_ch32_merged_ep300\results_gen.csv

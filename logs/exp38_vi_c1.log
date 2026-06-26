@@ -1,0 +1,25 @@
+[INFO] Device: cuda  VI latent generation (SD VAE + CA)
+[INFO] Loading SD VAE...
+[INFO] Loading DINO...
+C:\Users\Biocomputing/.cache/torch/hub\facebookresearch_dinov2_main\dinov2\layers\swiglu_ffn.py:51: UserWarning: xFormers is not available (SwiGLU)
+  warnings.warn("xFormers is not available (SwiGLU)")
+C:\Users\Biocomputing/.cache/torch/hub\facebookresearch_dinov2_main\dinov2\layers\attention.py:33: UserWarning: xFormers is not available (Attention)
+  warnings.warn("xFormers is not available (Attention)")
+C:\Users\Biocomputing/.cache/torch/hub\facebookresearch_dinov2_main\dinov2\layers\block.py:40: UserWarning: xFormers is not available (Block)
+  warnings.warn("xFormers is not available (Block)")
+
+--- S18 mode=C1 ---
+  VI n_time=512  train=432 val=54 test=54
+  [Encoder] Loaded eeg_enc from Exp37 checkpoint: checkpoints_vsre_latent_gen/20260610_105755_ch32_ep300_supcon_frozen_ca\subj18_best.pt
+  [Encoder] Frozen (C1)
+    Ep    TrLoss   ValLoss
+     20  0.18152  0.16134
+     40  0.07644  0.08394
+     60  0.05131  0.05338
+     80  0.03437  0.02710
+    100  0.04233  0.05689
+  [Done S18 C1]  DINO@1=0.1296 @3=0.3519 @5=0.5185  entropy=0.367  dominant=92.6%  best_ep=99
+
+Summary:
+  S18  C1: DINO@1=0.1296 @3=0.3519 @5=0.5185  dominant=92.6%  entropy=0.367
+[INFO] Saved: ./checkpoints_vi_latent_gen\20260611_071748_vi_ep100

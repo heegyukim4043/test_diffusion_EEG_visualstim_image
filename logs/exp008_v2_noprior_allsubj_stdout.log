@@ -1,0 +1,15 @@
+C:\Users\Biocomputing/.cache\torch\hub\facebookresearch_dinov2_main\dinov2\layers\swiglu_ffn.py:51: UserWarning: xFormers is not available (SwiGLU)
+  warnings.warn("xFormers is not available (SwiGLU)")
+C:\Users\Biocomputing/.cache\torch\hub\facebookresearch_dinov2_main\dinov2\layers\attention.py:33: UserWarning: xFormers is not available (Attention)
+  warnings.warn("xFormers is not available (Attention)")
+C:\Users\Biocomputing/.cache\torch\hub\facebookresearch_dinov2_main\dinov2\layers\block.py:40: UserWarning: xFormers is not available (Block)
+  warnings.warn("xFormers is not available (Block)")
+[INFO] Device: cuda  n_ch=32  max_sessions=None
+[INFO] Subjects (18): [1, 2, 3, 4, 5, 9, 10, 11, 16, 18, 19, 20, 21, 23, 24, 28, 29, 35]
+[INFO] Loading DINO for generation eval: dinov2_vits14
+
+=======================================================
+  Subject 01  (sessions=8)
+  S01  train=864  val=108  test=108
+    Ep    TrLoss   ValLoss
+    60   0.00435   0.00395

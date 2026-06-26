@@ -1,0 +1,53 @@
+[INFO] Device: cuda  latent diffusion (SD VAE)  epochs=300
+[INFO] Subjects: [1, 18]
+[INFO] Loading SD VAE...
+[INFO] Loading DINO: dinov2_vits14
+C:\Users\Biocomputing/.cache/torch/hub\facebookresearch_dinov2_main\dinov2\layers\swiglu_ffn.py:51: UserWarning: xFormers is not available (SwiGLU)
+  warnings.warn("xFormers is not available (SwiGLU)")
+C:\Users\Biocomputing/.cache/torch/hub\facebookresearch_dinov2_main\dinov2\layers\attention.py:33: UserWarning: xFormers is not available (Attention)
+  warnings.warn("xFormers is not available (Attention)")
+C:\Users\Biocomputing/.cache/torch/hub\facebookresearch_dinov2_main\dinov2\layers\block.py:40: UserWarning: xFormers is not available (Block)
+  warnings.warn("xFormers is not available (Block)")
+
+=======================================================
+  Subject 01
+  [dataset] SKIP S01 sess9: anomalous n_rep=108 (expected <=20), shape=(108, 3, 9, 4096, 40)
+  [dataset] S01  trials=1215  eff_sessions=9
+  [dataset] SKIP S01 sess9: anomalous n_rep=108 (expected <=20), shape=(108, 3, 9, 4096, 40)
+  [dataset] SKIP S01 sess9: anomalous n_rep=108 (expected <=20), shape=(108, 3, 9, 4096, 40)
+  S01  train=972  val=117  test=126
+  [MultiImg] K per class: [2, 2, 2, 2, 2, 2, 2, 2, 2]
+  [SupCon encoder] Loaded checkpoints_vsre_dino/20260530_095045_ch32_merged_ep200_supcon\subj01_best.pt
+  [EEG encoder] Frozen
+  [UNet] Cross-attention conditioning (n_eeg_tokens=8)
+    Ep    TrLoss   ValLoss
+     60  0.04067  0.03768
+    120  0.02746  0.04032
+    180  0.02575  0.01968
+    240  0.02125  0.02105
+    300  0.01461  0.01105
+  [Done S01]  best_val=0.01105  DINO@1=0.2600  entropy=0.265  dominant=94.0%
+
+=======================================================
+  Subject 18
+  [dataset] S18  trials=1080  eff_sessions=8
+  S18  train=864  val=108  test=108
+  [MultiImg] K per class: [2, 2, 2, 2, 2, 2, 2, 2, 2]
+  [SupCon encoder] Loaded checkpoints_vsre_dino/20260530_095045_ch32_merged_ep200_supcon\subj18_best.pt
+  [EEG encoder] Frozen
+  [UNet] Cross-attention conditioning (n_eeg_tokens=8)
+    Ep    TrLoss   ValLoss
+     60  0.04104  0.15351
+    120  0.02517  0.16761
+    180  0.02337  0.19478
+    240  0.01682  0.18900
+    300  0.01511  0.18404
+  [Done S18]  best_val=0.10962  DINO@1=0.1600  entropy=1.517  dominant=40.0%
+
+=======================================================
+Summary
+   Subj   DINO@1   entropy   dominant
+  S01     0.2600     0.265      94.0%
+  S18     0.1600     1.517      40.0%
+  Mean    0.2100     0.891      67.0%
+[INFO] Saved: ./checkpoints_vsre_latent_gen\20260611_123844_ch32_ep300_supcon_frozen_ca_mi

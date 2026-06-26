@@ -1,0 +1,62 @@
+C:\Users\Biocomputing/.cache\torch\hub\facebookresearch_dinov2_main\dinov2\layers\swiglu_ffn.py:51: UserWarning: xFormers is not available (SwiGLU)
+  warnings.warn("xFormers is not available (SwiGLU)")
+C:\Users\Biocomputing/.cache\torch\hub\facebookresearch_dinov2_main\dinov2\layers\attention.py:33: UserWarning: xFormers is not available (Attention)
+  warnings.warn("xFormers is not available (Attention)")
+C:\Users\Biocomputing/.cache\torch\hub\facebookresearch_dinov2_main\dinov2\layers\block.py:40: UserWarning: xFormers is not available (Block)
+  warnings.warn("xFormers is not available (Block)")
+[INFO] Device: cuda  n_ch=32  max_sessions=None
+[INFO] Subjects (3): [1, 2, 18]
+[INFO] Loading DINO for generation eval: dinov2_vits14
+
+=======================================================
+  Subject 01  (sessions=10)
+  [dataset] SKIP S01 sess9: anomalous n_rep=108 (expected <=20), shape=(108, 3, 9, 4096, 40)
+  [dataset] S01  trials=1215  eff_sessions=9
+  [dataset] SKIP S01 sess9: anomalous n_rep=108 (expected <=20), shape=(108, 3, 9, 4096, 40)
+  [dataset] SKIP S01 sess9: anomalous n_rep=108 (expected <=20), shape=(108, 3, 9, 4096, 40)
+  [AntiCollapse] lambda_dino_align=0.1  lambda_aux_ce=0.1
+  S01  train=972  val=117  test=126
+    Ep    TrLoss   ValLoss
+    60   0.83540   0.00332
+   120   0.77370   0.00197
+   180   0.77142   0.00094
+   240   0.73517   0.00058
+   300   0.74226   0.00041
+C:\Users\Biocomputing\anaconda3\envs\eegdiff\Lib\site-packages\torchvision\models\_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+C:\Users\Biocomputing\anaconda3\envs\eegdiff\Lib\site-packages\torchvision\models\_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=VGG16_Weights.IMAGENET1K_V1`. You can also use `weights=VGG16_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+C:\Users\Biocomputing\anaconda3\envs\eegdiff\Lib\site-packages\lpips\lpips.py:107: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  self.load_state_dict(torch.load(model_path, map_location='cpu'), strict=False)
+Setting up [LPIPS] perceptual loss: trunk [vgg], v[0.1], spatial [off]
+Loading model from: C:\Users\Biocomputing\anaconda3\envs\eegdiff\Lib\site-packages\lpips\weights\v0.1\vgg.pth
+  [Done S01]  best val loss=0.00037  L1=0.83272  SSIM=0.0450  LPIPS=0.7790  DINO@1=0.1190  proto_sim=0.0690  margin=-0.3874  entropy=0.074  dominant=96.8%
+
+=======================================================
+  Subject 02  (sessions=9)
+  [dataset] S02  trials=1161  eff_sessions=9
+  [AntiCollapse] lambda_dino_align=0.1  lambda_aux_ce=0.1
+  S02  train=927  val=108  test=126
+    Ep    TrLoss   ValLoss
+    60   0.83886   0.00359
+   120   0.79129   0.00215
+   180   0.76264   0.00119
+   240   0.75352   0.00051
+   300   0.75653   0.00043
+  [Done S02]  best val loss=0.00041  L1=0.83247  SSIM=0.0484  LPIPS=0.7663  DINO@1=0.1111  proto_sim=0.0597  margin=-0.4303  entropy=0.021  dominant=99.2%
+
+=======================================================
+  Subject 18  (sessions=8)
+  [dataset] S18  trials=1080  eff_sessions=8
+  [AntiCollapse] lambda_dino_align=0.1  lambda_aux_ce=0.1
+  S18  train=864  val=108  test=108
+    Ep    TrLoss   ValLoss
+    60   0.83509   0.00405
+   120   0.79968   0.00182
+   180   0.77375   0.00082
+   240   0.74842   0.00053
+   300   0.74345   0.00053
+  [Done S18]  best val loss=0.00044  L1=0.83541  SSIM=0.0443  LPIPS=0.7687  DINO@1=0.1111  proto_sim=0.0571  margin=-0.3782  entropy=0.000  dominant=100.0%
+
+[INFO] All done. Results: ./checkpoints_vsre_gen\20260525_180226_ch32_merged_ep300
+[INFO] CSV: ./checkpoints_vsre_gen\20260525_180226_ch32_merged_ep300\results_gen.csv

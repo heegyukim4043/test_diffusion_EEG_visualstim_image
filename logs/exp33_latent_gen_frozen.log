@@ -1,0 +1,64 @@
+[INFO] Device: cuda  latent diffusion (SD VAE)  epochs=300
+[INFO] Subjects: [1, 2, 18]
+[INFO] Loading SD VAE...
+[INFO] Loading DINO: dinov2_vits14
+C:\Users\Biocomputing/.cache/torch/hub\facebookresearch_dinov2_main\dinov2\layers\swiglu_ffn.py:51: UserWarning: xFormers is not available (SwiGLU)
+  warnings.warn("xFormers is not available (SwiGLU)")
+C:\Users\Biocomputing/.cache/torch/hub\facebookresearch_dinov2_main\dinov2\layers\attention.py:33: UserWarning: xFormers is not available (Attention)
+  warnings.warn("xFormers is not available (Attention)")
+C:\Users\Biocomputing/.cache/torch/hub\facebookresearch_dinov2_main\dinov2\layers\block.py:40: UserWarning: xFormers is not available (Block)
+  warnings.warn("xFormers is not available (Block)")
+
+=======================================================
+  Subject 01
+  [dataset] SKIP S01 sess9: anomalous n_rep=108 (expected <=20), shape=(108, 3, 9, 4096, 40)
+  [dataset] S01  trials=1215  eff_sessions=9
+  [dataset] SKIP S01 sess9: anomalous n_rep=108 (expected <=20), shape=(108, 3, 9, 4096, 40)
+  [dataset] SKIP S01 sess9: anomalous n_rep=108 (expected <=20), shape=(108, 3, 9, 4096, 40)
+  S01  train=972  val=117  test=126
+  [SupCon encoder] Loaded checkpoints_vsre_dino/20260530_095045_ch32_merged_ep200_supcon\subj01_best.pt
+  [EEG encoder] Frozen
+    Ep    TrLoss   ValLoss
+     60  0.03576  0.04278
+    120  0.02253  0.03165
+    180  0.02059  0.03471
+    240  0.02241  0.02322
+    300  0.01865  0.02701
+  [Done S01]  best_val=0.01375  DINO@1=0.3000  entropy=0.098  dominant=98.0%
+
+=======================================================
+  Subject 02
+  [dataset] S02  trials=1161  eff_sessions=9
+  S02  train=927  val=108  test=126
+  [SupCon encoder] Loaded checkpoints_vsre_dino/20260530_095045_ch32_merged_ep200_supcon\subj02_best.pt
+  [EEG encoder] Frozen
+    Ep    TrLoss   ValLoss
+     60  0.03952  0.04292
+    120  0.03052  0.03510
+    180  0.02433  0.03161
+    240  0.01929  0.02415
+    300  0.01843  0.03155
+  [Done S02]  best_val=0.01129  DINO@1=0.2600  entropy=0.098  dominant=98.0%
+
+=======================================================
+  Subject 18
+  [dataset] S18  trials=1080  eff_sessions=8
+  S18  train=864  val=108  test=108
+  [SupCon encoder] Loaded checkpoints_vsre_dino/20260530_095045_ch32_merged_ep200_supcon\subj18_best.pt
+  [EEG encoder] Frozen
+    Ep    TrLoss   ValLoss
+     60  0.03865  0.11729
+    120  0.02984  0.12359
+    180  0.02112  0.15778
+    240  0.01667  0.11756
+    300  0.01502  0.17982
+  [Done S18]  best_val=0.07223  DINO@1=0.4000  entropy=1.686  dominant=38.0%
+
+=======================================================
+Summary
+   Subj   DINO@1   entropy   dominant
+  S01     0.3000     0.098      98.0%
+  S02     0.2600     0.098      98.0%
+  S18     0.4000     1.686      38.0%
+  Mean    0.3200     0.627      78.0%
+[INFO] Saved: ./checkpoints_vsre_latent_gen\20260609_165850_ch32_ep300_supcon_frozen

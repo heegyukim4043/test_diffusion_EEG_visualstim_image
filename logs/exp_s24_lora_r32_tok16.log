@@ -1,0 +1,23 @@
+[INFO] Device: cuda  SD1.5 LoRA generator
+[INFO] Loading DINO...
+C:\Users\pq/.cache/torch/hub\facebookresearch_dinov2_main\dinov2\layers\swiglu_ffn.py:51: UserWarning: xFormers is not available (SwiGLU)
+  warnings.warn("xFormers is not available (SwiGLU)")
+C:\Users\pq/.cache/torch/hub\facebookresearch_dinov2_main\dinov2\layers\attention.py:33: UserWarning: xFormers is not available (Attention)
+  warnings.warn("xFormers is not available (Attention)")
+C:\Users\pq/.cache/torch/hub\facebookresearch_dinov2_main\dinov2\layers\block.py:40: UserWarning: xFormers is not available (Block)
+  warnings.warn("xFormers is not available (Block)")
+[INFO] Loading SD VAE...
+C:\Users\pq\anaconda3\envs\vsvi\lib\site-packages\huggingface_hub\utils\_validators.py:205: UserWarning: The `local_dir_use_symlinks` argument is deprecated and ignored in `hf_hub_download`. Downloading to a local directory does not use symlinks anymore.
+  warnings.warn(
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+
+=======================================================
+  Subject 24
+  [dataset] S24  trials=1350  eff_sessions=10
+  S24  train=1080  val=135  test=135
+  Class latents: torch.Size([9, 4, 64, 64])
+  [Encoder] Frozen
+  Loading SD 1.5 UNet...
+trainable params: 6,377,472 || all params: 865,898,436 || trainable%: 0.7365
+    Ep    TrLoss
+      1  0.03799

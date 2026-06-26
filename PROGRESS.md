@@ -1,5 +1,58 @@
 # EEG-to-Image Diffusion Model: Progress Log
 
+## Current Status Summary (2026-06-27)
+
+### GitHub 백업 완료
+
+- 스크립트 19개 + 체크포인트 7개 → `main` 브랜치 push 완료
+- 업로드된 체크포인트:
+  - SupCon S01: `checkpoints_vsre_dino/20260530_095045_ch32_merged_ep200_supcon/subj01_best.pt`
+  - SupCon S18: `checkpoints_vsre_dino/20260530_095045_ch32_merged_ep200_supcon/subj18_best.pt`
+  - SupCon S24: `checkpoints_vsre_dino/20260604_091352_ch32_merged_ep200_supcon/subj24_best.pt`
+  - LoRA S01 r=32: `checkpoints_vsre_lora_gen/20260617_074245_lora_r32_ep100/subj01_lora_best.pt` (74.5MB)
+  - LoRA S18 r=16: `checkpoints_vsre_lora_gen/20260612_010728_lora_r16_ep100/subj18_lora_best.pt` (62.3MB)
+  - LoRA S24 r=16: `checkpoints_vsre_lora_gen/20260625_111012_lora_r16_ep100/subj24_lora_best.pt` (62.3MB, 실패 결과)
+  - LoRA S24 r=32: `checkpoints_vsre_lora_gen/20260626_073002_lora_r32_ep100/subj24_lora_best.pt` (74.5MB, 미평가)
+
+### S24 r=16 실패 원인 확정 (ROOT CAUSE)
+
+- **결과**: DINO@1=0.1111 (chance), entropy=2.001, dominant=28.1%
+- **원인**: S24 학습 시 `--supcon_ckpt`로 `20260530_095045_ch32_merged_ep200_supcon`을 사용했으나, 이 디렉터리에는 `subj24_best.pt`가 없음 (S01/S02/S18만 존재)
+- **결과**: `train_vs_re_lora_gen.py`가 파일 없으면 경고 없이 random init으로 EEG 인코더 초기화 → EEG conditioning 무효
+- **생성 패턴**: diverse generation (high entropy)이지만 class-unconditioned → DINO@1 = chance
+- **올바른 S24용 SupCon**: `checkpoints_vsre_dino/20260604_091352_ch32_merged_ep200_supcon` (Exp26 전체 피험자, S24 Top-1=0.3259)
+
+### S24 재실행 커맨드 (미실행)
+
+```bash
+# r=16
+python train_vs_re_lora_gen.py \
+  --subject_ids 24 --lora_r 16 --n_eeg_tokens 16 --epochs 100 \
+  --supcon_ckpt checkpoints_vsre_dino/20260604_091352_ch32_merged_ep200_supcon
+
+# r=32
+python train_vs_re_lora_gen.py \
+  --subject_ids 24 --lora_r 32 --n_eeg_tokens 16 --epochs 100 \
+  --supcon_ckpt checkpoints_vsre_dino/20260604_091352_ch32_merged_ep200_supcon
+```
+
+### 현재 S24 결과 현황
+
+| Subject | r=16 DINO@1 | r=32 DINO@1 | 비고 |
+|---------|-------------|-------------|------|
+| S01 | 0.3333 | **0.3571** | S01 best = r=32 |
+| S18 | **0.2963** | 0.2870 | S18 best = r=16 |
+| S24 | 0.1111 ❌ | 미평가 | r=16은 random encoder init 때문 → 재실행 필요 |
+
+### 다음 우선순위 (HUMAN_DIRECTIVE.md 기준)
+
+1. **P0**: S24 SD LoRA VS generation 재실행 (올바른 SupCon 사용)
+2. **P1**: Exp43 VI fine-tuning (S01/S18 최적 LoRA 체크포인트 기준)
+3. **P2**: Exp42-B Step5 augmentation full-test 평가
+4. **P3**: Step6 staged encoder unfreeze
+
+---
+
 ## Current Status Summary (2026-06-26)
 
 ### S24 SD LoRA VS Generation (2026-06-25~26)

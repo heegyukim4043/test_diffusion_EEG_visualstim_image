@@ -1,0 +1,37 @@
+C:\Users\Biocomputing/.cache\torch\hub\facebookresearch_dinov2_main\dinov2\layers\swiglu_ffn.py:51: UserWarning: xFormers is not available (SwiGLU)
+  warnings.warn("xFormers is not available (SwiGLU)")
+C:\Users\Biocomputing/.cache\torch\hub\facebookresearch_dinov2_main\dinov2\layers\attention.py:33: UserWarning: xFormers is not available (Attention)
+  warnings.warn("xFormers is not available (Attention)")
+C:\Users\Biocomputing/.cache\torch\hub\facebookresearch_dinov2_main\dinov2\layers\block.py:40: UserWarning: xFormers is not available (Block)
+  warnings.warn("xFormers is not available (Block)")
+[INFO] Device: cuda  n_ch=32  max_sessions=None  loss_type=supcon
+[INFO] Subjects (1): [1]
+[INFO] Session counts: {1: 10}
+[INFO] Loading DINO: dinov2_vits14
+  proto_dino: torch.Size([9, 384])
+
+=======================================================
+  Subject 01  (sessions=10)
+  [dataset] SKIP S01 sess9: anomalous n_rep=108 (expected <=20), shape=(108, 3, 9, 4096, 40)
+  [dataset] S01  trials=1215  eff_sessions=9
+  [dataset] SKIP S01 sess9: anomalous n_rep=108 (expected <=20), shape=(108, 3, 9, 4096, 40)
+  [dataset] SKIP S01 sess9: anomalous n_rep=108 (expected <=20), shape=(108, 3, 9, 4096, 40)
+  S01  train=972  val=117  test=126
+    Ep     Loss   ValT1   ValT3   ValT5    temp
+    60   3.5062  0.3162  0.7009  0.8462   0.050
+   120   3.1866  0.3077  0.5299  0.7265   0.050
+   180   2.8637  0.3504  0.6068  0.7265   0.050
+   240   2.7639  0.2735  0.5897  0.8120   0.050
+   300   2.7233  0.3162  0.6752  0.7949   0.050
+  [Test S01]  Top-1=0.4206  Top-3=0.7222  Top-5=0.8175  (random=0.1111)
+
+=======================================================
+  Summary  [merged, ch=32]
+   Subj    Top-1    Top-3    Top-5
+  --------------------------------
+  S01     0.4206   0.7222   0.8175
+  --------------------------------
+  Mean    0.4206   0.7222   0.8175
+  Random  0.1111
+
+[INFO] Saved: ./checkpoints_vsre_dino\20260610_102850_ch32_merged_ep300_supcon

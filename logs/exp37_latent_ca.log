@@ -1,0 +1,51 @@
+[INFO] Device: cuda  latent diffusion (SD VAE)  epochs=300
+[INFO] Subjects: [1, 18]
+[INFO] Loading SD VAE...
+[INFO] Loading DINO: dinov2_vits14
+C:\Users\Biocomputing/.cache/torch/hub\facebookresearch_dinov2_main\dinov2\layers\swiglu_ffn.py:51: UserWarning: xFormers is not available (SwiGLU)
+  warnings.warn("xFormers is not available (SwiGLU)")
+C:\Users\Biocomputing/.cache/torch/hub\facebookresearch_dinov2_main\dinov2\layers\attention.py:33: UserWarning: xFormers is not available (Attention)
+  warnings.warn("xFormers is not available (Attention)")
+C:\Users\Biocomputing/.cache/torch/hub\facebookresearch_dinov2_main\dinov2\layers\block.py:40: UserWarning: xFormers is not available (Block)
+  warnings.warn("xFormers is not available (Block)")
+
+=======================================================
+  Subject 01
+  [dataset] SKIP S01 sess9: anomalous n_rep=108 (expected <=20), shape=(108, 3, 9, 4096, 40)
+  [dataset] S01  trials=1215  eff_sessions=9
+  [dataset] SKIP S01 sess9: anomalous n_rep=108 (expected <=20), shape=(108, 3, 9, 4096, 40)
+  [dataset] SKIP S01 sess9: anomalous n_rep=108 (expected <=20), shape=(108, 3, 9, 4096, 40)
+  S01  train=972  val=117  test=126
+  [SupCon encoder] Loaded checkpoints_vsre_dino/20260530_095045_ch32_merged_ep200_supcon\subj01_best.pt
+  [EEG encoder] Frozen
+  [UNet] Cross-attention conditioning (n_eeg_tokens=8)
+    Ep    TrLoss   ValLoss
+     60  0.03625  0.04716
+    120  0.02441  0.03087
+    180  0.02152  0.03980
+    240  0.01867  0.01723
+    300  0.01836  0.02510
+  [Done S01]  best_val=0.01239  DINO@1=0.3000  entropy=0.325  dominant=90.0%
+
+=======================================================
+  Subject 18
+  [dataset] S18  trials=1080  eff_sessions=8
+  S18  train=864  val=108  test=108
+  [SupCon encoder] Loaded checkpoints_vsre_dino/20260530_095045_ch32_merged_ep200_supcon\subj18_best.pt
+  [EEG encoder] Frozen
+  [UNet] Cross-attention conditioning (n_eeg_tokens=8)
+    Ep    TrLoss   ValLoss
+     60  0.03929  0.18024
+    120  0.02595  0.16147
+    180  0.02064  0.17435
+    240  0.01656  0.11647
+    300  0.01381  0.18473
+  [Done S18]  best_val=0.08683  DINO@1=0.4200  entropy=1.832  dominant=32.0%
+
+=======================================================
+Summary
+   Subj   DINO@1   entropy   dominant
+  S01     0.3000     0.325      90.0%
+  S18     0.4200     1.832      32.0%
+  Mean    0.3600     1.079      61.0%
+[INFO] Saved: ./checkpoints_vsre_latent_gen\20260610_105755_ch32_ep300_supcon_frozen_ca

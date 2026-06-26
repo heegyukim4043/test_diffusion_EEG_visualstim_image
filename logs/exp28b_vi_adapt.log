@@ -1,0 +1,24 @@
+C:\Users\Biocomputing/.cache\torch\hub\facebookresearch_dinov2_main\dinov2\layers\swiglu_ffn.py:51: UserWarning: xFormers is not available (SwiGLU)
+  warnings.warn("xFormers is not available (SwiGLU)")
+C:\Users\Biocomputing/.cache\torch\hub\facebookresearch_dinov2_main\dinov2\layers\attention.py:33: UserWarning: xFormers is not available (Attention)
+  warnings.warn("xFormers is not available (Attention)")
+C:\Users\Biocomputing/.cache\torch\hub\facebookresearch_dinov2_main\dinov2\layers\block.py:40: UserWarning: xFormers is not available (Block)
+  warnings.warn("xFormers is not available (Block)")
+
+S01: VI train=432 val=54 test=54
+
+S02: VI train=432 val=54 test=54
+
+S18: VI train=432 val=54 test=54
+
+Summary
+S01  scratch T1=0.0926 T3=0.4259 T5=0.6852 best_ep=74
+S01 finetune T1=0.1481 T3=0.4444 T5=0.6481 best_ep=27
+S01   linear T1=0.1852 T3=0.3333 T5=0.4815 best_ep=2
+S02  scratch T1=0.0741 T3=0.3519 T5=0.5926 best_ep=15
+S02 finetune T1=0.0926 T3=0.3704 T5=0.5926 best_ep=17
+S02   linear T1=0.0926 T3=0.2407 T5=0.4815 best_ep=17
+S18  scratch T1=0.1296 T3=0.2778 T5=0.5000 best_ep=23
+S18 finetune T1=0.1111 T3=0.4259 T5=0.5926 best_ep=8
+S18   linear T1=0.1852 T3=0.3704 T5=0.6481 best_ep=12
+Saved: ./checkpoints_vi_adapt\20260605_182521_exp28b_all\results_vi_adapt.csv

@@ -1,0 +1,2 @@
+subject,session,status,file,exists,shape,n_rep,n_blk,n_cls,n_time,n_ch_all,total_trials,per_class,finite_frac,mean,std
+S23,1,ok,preproc_vs_re\preproc_subj_23_1.mat,True,"(5, 3, 9, 4096, 40)",5,3,9,4096,40,135,15;15;15;15;15;15;15;15;15,1.0,-0.3071465492248535,18.987043380737305

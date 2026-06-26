@@ -1,0 +1,23 @@
+[INFO] Device: cuda  SD1.5 LoRA generator
+[INFO] Loading DINO...
+C:\Users\Biocomputing/.cache/torch/hub\facebookresearch_dinov2_main\dinov2\layers\swiglu_ffn.py:51: UserWarning: xFormers is not available (SwiGLU)
+  warnings.warn("xFormers is not available (SwiGLU)")
+C:\Users\Biocomputing/.cache/torch/hub\facebookresearch_dinov2_main\dinov2\layers\attention.py:33: UserWarning: xFormers is not available (Attention)
+  warnings.warn("xFormers is not available (Attention)")
+C:\Users\Biocomputing/.cache/torch/hub\facebookresearch_dinov2_main\dinov2\layers\block.py:40: UserWarning: xFormers is not available (Block)
+  warnings.warn("xFormers is not available (Block)")
+[INFO] Loading SD VAE...
+
+=======================================================
+  Subject 18
+  [dataset] S18  trials=1080  eff_sessions=8
+  S18  train=864  val=108  test=108
+  Class latents: torch.Size([9, 4, 64, 64])
+  [Encoder] Loaded from checkpoints_vsre_latent_gen/20260610_105755_ch32_ep300_supcon_frozen_ca\subj18_best.pt
+  [Encoder] Frozen
+  Loading SD 1.5 UNet...
+trainable params: 1,594,368 || all params: 861,115,332 || trainable%: 0.18515150535027286
+    Ep    TrLoss
+      1  0.03742
+     20  0.01283
+     40  0.01036
