@@ -22,6 +22,7 @@ import torchvision.transforms as T
 from PIL import Image
 from torch.utils.data import DataLoader
 from collections import Counter
+from torch.cuda.amp import autocast, GradScaler
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from dataset_vs_re import VSReDataset, collate_fn, available_subjects
@@ -278,6 +279,9 @@ def train_subject(sid, args, vae, dino, proto_dino, dino_feat_dim, acp, device, 
     # SD 1.5 UNet with LoRA
     unet = load_sd15_unet_lora(args.lora_r, args.lora_alpha)
     unet = unet.to(device)
+    if getattr(args, 'grad_ckpt', False):
+        unet.enable_gradient_checkpointing()
+        print("  [UNet] gradient checkpointing enabled", flush=True)
 
     # EEG conditioning projector
     cond_proj = EEGConditionProjector(eeg_dim=LATENT_DIM, sd_dim=768,
@@ -296,6 +300,8 @@ def train_subject(sid, args, vae, dino, proto_dino, dino_feat_dim, acp, device, 
     best_ep  = 0
     subj_t = torch.zeros(1, dtype=torch.long, device=device)
     best_path = os.path.join(save_dir, f"subj{sid:02d}_lora_best.pt")
+    use_fp16 = getattr(args, 'fp16', False)
+    scaler = GradScaler() if use_fp16 else None
 
     print(f"    Ep    TrLoss", flush=True)
     for epoch in range(1, args.epochs + 1):
@@ -318,11 +324,20 @@ def train_subject(sid, args, vae, dino, proto_dino, dino_feat_dim, acp, device, 
                 x0 = cls_latents[lbl]             # (B, 4, 64, 64)
             t  = torch.randint(0, args.num_timesteps, (eeg.size(0),), device=device)
             xt, noise = ddpm_q_sample(x0, t, acp)
-            noise_pred = unet(xt, t, encoder_hidden_states=cond_tokens).sample
-            loss = F.mse_loss(noise_pred, noise)
-            optimizer.zero_grad(); loss.backward()
-            nn.utils.clip_grad_norm_(train_params, 1.0)
-            optimizer.step()
+            with autocast(enabled=use_fp16):
+                noise_pred = unet(xt, t, encoder_hidden_states=cond_tokens).sample
+                loss = F.mse_loss(noise_pred, noise)
+            optimizer.zero_grad()
+            if scaler is not None:
+                scaler.scale(loss).backward()
+                scaler.unscale_(optimizer)
+                nn.utils.clip_grad_norm_(train_params, 1.0)
+                scaler.step(optimizer)
+                scaler.update()
+            else:
+                loss.backward()
+                nn.utils.clip_grad_norm_(train_params, 1.0)
+                optimizer.step()
             tr_loss += loss.item()
         tr_loss /= max(len(train_loader), 1)
 
@@ -388,6 +403,8 @@ def main():
                         help="Dir with subj{sid:02d}_best.pt containing eeg_enc state")
     parser.add_argument("--dino_model",    default="dinov2_vits14")
     parser.add_argument("--ckpt_root",     default="./checkpoints_vsre_lora_gen")
+    parser.add_argument("--fp16",      action="store_true", help="Mixed precision fp16 training (halves GPU memory)")
+    parser.add_argument("--grad_ckpt", action="store_true", help="Gradient checkpointing on UNet (saves memory, slower)")
     args = parser.parse_args()
 
     set_seed(args.seed)
