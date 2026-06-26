@@ -1,0 +1,53 @@
+# 데이터 (대용량)
+preproc_vs_re/
+preproc_vi_re/
+preproc_data/
+preproc_data_rest/
+preproc_for_gan_vs/
+preproc_data.tar.gz
+test_diffusion_model_project.tar.gz
+
+# preproc_data_vi: mat 파일 제외, images 폴더만 포함
+preproc_data_vi/*
+!preproc_data_vi/images/
+
+# mat 데이터 파일
+*.mat
+
+# 체크포인트 및 모델 가중치 (.pt 파일 전체 제외)
+checkpoints_*/
+checkpoints_dino/
+master_results/
+master_results_smoke/
+*.pt
+
+# 생성 이미지 출력
+gen_image/
+samples_*/
+xai_ddim/
+samples_rest_eegonly_tf/
+samples_subj128_group/
+samples_subj128_group_eegonly_tf/
+samples_vi_repa_9cls/
+samples_vs_repa/
+samples_vs2vi/
+check_sample/
+test_data/
+workspace/
+
+# Python 캐시
+__pycache__/
+*.pyc
+*.pyo
+
+# 업로드 임시 폴더
+upload_npu/
+
+# 백업 로그 (대용량)
+vsvi_project_backup_20260617.log
+
+# 기타
+*.egg-info/
+.idea/
+.vscode/
+*.DS_Store
