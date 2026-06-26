@@ -405,9 +405,13 @@ def main():
     subject_ids = [s for s in subject_ids if s in avail]
 
     _hub_dir = os.path.expanduser("~/.cache/torch/hub")
+    _dino_local = os.path.join(_hub_dir, "facebookresearch_dinov2_main")
     print("[INFO] Loading DINO...", flush=True)
-    dino = torch.hub.load(os.path.join(_hub_dir, "facebookresearch_dinov2_main"),
-                          args.dino_model, source="local", verbose=False)
+    if os.path.isdir(_dino_local):
+        dino = torch.hub.load(_dino_local, args.dino_model, source="local", verbose=False)
+    else:
+        print("[INFO]  local cache not found, downloading from facebookresearch/dinov2...", flush=True)
+        dino = torch.hub.load("facebookresearch/dinov2", args.dino_model, verbose=False)
     dino = dino.to(device).eval()
     for p in dino.parameters(): p.requires_grad_(False)
     dino_feat_dim = DINO_DIM[args.dino_model]
