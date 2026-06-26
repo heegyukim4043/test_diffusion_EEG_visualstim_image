@@ -31,7 +31,7 @@ try:
     REBEL_AVAILABLE = True
 except ImportError:
     REBEL_AVAILABLE = False
-    print("[WARN] rebel not found — compile steps will be skipped, eager-only mode.")
+    print("[WARN] rebel not found -- compile steps will be skipped, eager-only mode.")
 
 # ── local model imports ────────────────────────────────────────────────────
 sys.path.insert(0, os.path.dirname(__file__))
@@ -211,17 +211,85 @@ class Target6_FullEncoderOriginal(nn.Module):
         return self.enc(x)
 
 
+class Target7_S24StaticPE(nn.Module):
+    """track_b_s24_staticpe: Static-PE encoder loaded with actual S24 SupCon weights.
+    Verifies that real checkpoint weights survive static PE rewrite + compile.
+    Input : (1, 32, 2048)
+    Output: (1, OUT_DIM)
+
+    Checkpoint: checkpoints_vsre_dino/20260604_091352_ch32_merged_ep200_supcon/subj24_best.pt
+    """
+    SUPCON_CKPT = (
+        "checkpoints_vsre_dino/20260604_091352_ch32_merged_ep200_supcon/subj24_best.pt"
+    )
+
+    def __init__(self, ckpt_path: str = None):
+        super().__init__()
+        self.enc = Target5_EncoderV2StaticPE()
+        path = ckpt_path or self.SUPCON_CKPT
+        if os.path.isfile(path):
+            ckpt = torch.load(path, map_location="cpu", weights_only=False)
+            # SupCon ckpt stores EEGDINORegressor.state_dict() under "eeg_enc"
+            # Keys are prefixed "eeg_encoder." — strip to match Target5 keys
+            if "eeg_enc" in ckpt:
+                raw = ckpt["eeg_enc"]
+            elif "model" in ckpt:
+                raw = ckpt["model"]
+            else:
+                raw = ckpt
+            PREFIX = "eeg_encoder."
+            stripped = {
+                k[len(PREFIX):]: v
+                for k, v in raw.items()
+                if k.startswith(PREFIX)
+            }
+            own_keys = set(self.enc.state_dict().keys())
+            # exclude "pe" buffer (not in original EEGEncoderV2)
+            own_keys_no_pe = own_keys - {"pe"}
+            filtered = {k: v for k, v in stripped.items() if k in own_keys_no_pe}
+            missing = own_keys_no_pe - set(filtered.keys())
+            self.enc.load_state_dict(filtered, strict=False)
+            print(f"  [T7] Loaded {len(filtered)}/{len(own_keys_no_pe)} keys from {path}"
+                  f"  (missing={len(missing)})", flush=True)
+        else:
+            print(f"  [T7] WARNING: checkpoint not found at {path} -- random weights", flush=True)
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        return self.enc(x)
+
+
 # ═══════════════════════════════════════════════════════════════════════════
 # Diagnostic runner
 # ═══════════════════════════════════════════════════════════════════════════
 
-TARGETS = [
-    ("T1_conv_frontend",           Target1_ConvFrontend,         (1, 32, 2048),     "float32"),
+# ── Track B confirmed results (from NPU server run 2026-06-27) ────────────────
+# These are manually recorded observations, not produced by this script.
+KNOWN_RESULTS_TRACK_B = [
+    # (component,                      detail,                              status)
+    ("checkpoint_loading",             "S01/S18/S24 SupCon clean load",    "SUCCESS"),
+    ("cpu_encoder_inference",          "output shape=(1, 256)",             "SUCCESS"),
+    ("rbln_smi_device_detect",         "RBLN-CA22 x2 recognized",          "SUCCESS"),
+    ("graph_conversion_transformer",   "TransformerEncoder TVM convert",   "FAIL"),
+    ("full_encoder_compile",           "EEGEncoderV2 rebel.compile",       "FAIL"),
+    ("npu_inference",                  "blocked by compile failure",        "BLOCKED"),
+]
+
+TARGETS_ALL = [
+    ("T1_conv_frontend",           Target1_ConvFrontend,         (1, 32, 2048),         "float32"),
     ("T2_sinpe_static_buffer",     Target2_SinPEStatic,          (1, 1024, HIDDEN_DIM), "float32"),
     ("T3_one_transformer_layer",   Target3_OneTransformerLayer,  (1, 1024, HIDDEN_DIM), "float32"),
     ("T4_four_transformer_layers", Target4_FourTransformerLayers,(1, 1024, HIDDEN_DIM), "float32"),
-    ("T5_encoder_static_pe",       Target5_EncoderV2StaticPE,    (1, 32, 2048),     "float32"),
-    ("T6_full_encoder_original",   Target6_FullEncoderOriginal,  (1, 32, 2048),     "float32"),
+    ("T5_encoder_static_pe",       Target5_EncoderV2StaticPE,    (1, 32, 2048),         "float32"),
+    ("T6_full_encoder_original",   Target6_FullEncoderOriginal,  (1, 32, 2048),         "float32"),
+    ("T7_s24_staticpe_real_ckpt",  Target7_S24StaticPE,          (1, 32, 2048),         "float32"),
+]
+
+TARGETS_TRACK_B = [
+    t for t in TARGETS_ALL if t[0] in {
+        "T5_encoder_static_pe",
+        "T6_full_encoder_original",
+        "T7_s24_staticpe_real_ckpt",
+    }
 ]
 
 
@@ -258,23 +326,46 @@ def save_log(name: str, content: str, suffix: str):
     return path
 
 
+def print_known_results():
+    print("\n=== Track B Known Results (NPU server, 2026-06-27) ===")
+    print(f"  {'Component':<40s} {'Detail':<35s} Status")
+    print(f"  {'-'*40} {'-'*35} ------")
+    for comp, detail, status in KNOWN_RESULTS_TRACK_B:
+        print(f"  {comp:<40s} {detail:<35s} {status}")
+    print()
+
+
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--ckpt",   default=None, help="Optional: load checkpoint weights for T5/T6")
-    parser.add_argument("--sid",    type=int, default=24)
-    parser.add_argument("--device", default="cpu")
+    parser.add_argument("--ckpt",     default=None, help="Override checkpoint path for T7")
+    parser.add_argument("--sid",      type=int, default=24)
+    parser.add_argument("--device",   default="cpu")
+    parser.add_argument("--track_b",  action="store_true",
+                        help="Run only Track B targets (T5/T6/T7) for S24 static-PE verification")
+    parser.add_argument("--known",    action="store_true",
+                        help="Print known Track B results table and exit")
     args = parser.parse_args()
 
+    if args.known:
+        print_known_results()
+        return
+
     device = torch.device(args.device)
-    print(f"Device: {device}  |  rebel: {REBEL_AVAILABLE}\n")
+    print(f"Device: {device}  |  rebel: {REBEL_AVAILABLE}")
+    print_known_results()
+
+    targets = TARGETS_TRACK_B if args.track_b else TARGETS_ALL
 
     results = []   # list of dicts for report
 
-    for (name, cls, input_shape, dtype) in TARGETS:
+    for (name, cls, input_shape, dtype) in targets:
         print(f"{'='*60}")
         print(f"Target: {name}  input={input_shape}")
 
-        model = cls().to(device)
+        if cls is Target7_S24StaticPE:
+            model = cls(ckpt_path=args.ckpt).to(device)
+        else:
+            model = cls().to(device)
         model.eval()
 
         # ── eager forward ──────────────────────────────────────────
@@ -341,15 +432,24 @@ def main():
         )
 
     lines += [
+        "\n## Track B Known Results (NPU server, 2026-06-27)\n",
+        "| Component | Detail | Status |",
+        "|-----------|--------|--------|",
+    ]
+    for comp, detail, status in KNOWN_RESULTS_TRACK_B:
+        lines.append(f"| {comp} | {detail} | {status} |")
+
+    lines += [
         "\n## Target Descriptions\n",
         "| Target | Description | RBLN risk |",
         "|--------|-------------|-----------|",
         "| T1_conv_frontend           | OccipitalChannelGate + MultiScaleStem + proj Conv1d | low |",
         "| T2_sinpe_static_buffer     | Pre-computed sinusoidal PE as buffer (no torch.arange at runtime) | low |",
         "| T3_one_transformer_layer   | Single TransformerEncoderLayer (batch_first=True) | medium |",
-        "| T4_four_transformer_layers | 4× TransformerEncoderLayer + mean pool | high |",
-        "| T5_encoder_static_pe       | Full encoder with dynamic PE → static buffer (fix candidate) | high |",
+        "| T4_four_transformer_layers | 4x TransformerEncoderLayer + mean pool | high |",
+        "| T5_encoder_static_pe       | Full encoder with dynamic PE -> static buffer (fix candidate) | high |",
         "| T6_full_encoder_original   | Original EEGEncoderV2 with dynamic torch.arange PE | expected fail |",
+        "| T7_s24_staticpe_real_ckpt  | Static-PE encoder loaded with actual S24 SupCon weights | high |",
         "\n## Known RBLN Risk Factors\n",
         "- `torch.arange(seq_len, device=device)` inside `forward` → dynamic tensor creation",
         "- `nn.TransformerEncoderLayer(batch_first=True)` → scatter/gather attention ops",
