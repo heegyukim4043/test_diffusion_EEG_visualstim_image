@@ -341,8 +341,7 @@ def train_subject(sid, args, vae, dino, proto_dino, dino_feat_dim, acp, device, 
             tr_loss += loss.item()
         tr_loss /= max(len(train_loader), 1)
 
-        if epoch % 20 == 0 or epoch == 1:
-            print(f"  {epoch:5d}  {tr_loss:.5f}", flush=True)
+        print(f"  {epoch:5d}  {tr_loss:.5f}", flush=True)
 
         if tr_loss < best_val:
             best_val = tr_loss; best_ep = epoch
