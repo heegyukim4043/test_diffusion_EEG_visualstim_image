@@ -190,6 +190,10 @@ class VISpecificFrontend(nn.Module):
         self.channel_gate = copy.deepcopy(source_eeg_encoder.channel_gate)
         self.stem = copy.deepcopy(source_eeg_encoder.stem)
         self.proj = copy.deepcopy(source_eeg_encoder.proj)
+        # deepcopy preserves the frozen source parameters' requires_grad=False.
+        # This branch is the only trainable part of the experiment.
+        for parameter in self.parameters():
+            parameter.requires_grad_(True)
 
     def forward(self, eeg: torch.Tensor) -> torch.Tensor:
         eeg = (eeg - eeg.mean(-1, keepdim=True)) / (
@@ -497,6 +501,17 @@ def main() -> None:
             parameter.requires_grad_(False)
 
     vi_frontend = VISpecificFrontend(source_model.eeg_encoder).to(device)
+    n_trainable = sum(
+        parameter.numel()
+        for parameter in vi_frontend.parameters()
+        if parameter.requires_grad
+    )
+    if n_trainable == 0:
+        raise RuntimeError("VI-specific front-end has zero trainable parameters")
+    print(
+        f"[INFO] VI front-end trainable parameters={n_trainable:,}",
+        flush=True,
+    )
     initial_frontend_state = cpu_state_dict(vi_frontend)
     vi_train = SessionEEGDataset(
         args.vi_root, args.subject_id, train_sessions, "vi_train_sessions"
