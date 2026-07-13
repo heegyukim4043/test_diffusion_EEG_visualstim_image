@@ -83,7 +83,7 @@ def parse_args() -> argparse.Namespace:
         "--steps_per_epoch",
         type=int,
         default=0,
-        help="0 chooses ceil(max(train sizes)/(9*samples_per_class))",
+        help="0 chooses one balanced VI-train pass per epoch",
     )
     parser.add_argument("--eval_batch_size", type=int, default=32)
     parser.add_argument("--epochs", type=int, default=120)
@@ -364,7 +364,7 @@ def main() -> None:
     vi_pools = class_index_pools(vi_train)
     paired_batch_size = N_CLASSES * args.samples_per_class
     steps_per_epoch = args.steps_per_epoch or math.ceil(
-        max(len(vs_train), len(vi_train)) / paired_batch_size
+        len(vi_train) / paired_batch_size
     )
     print(
         f"[INFO] paired batch={paired_batch_size} per domain, "
