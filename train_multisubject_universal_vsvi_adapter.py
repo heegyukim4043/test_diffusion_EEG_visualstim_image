@@ -230,10 +230,38 @@ def resolve_supcon_checkpoint(roots: list[str], sid: int) -> Path:
 def resolve_lora_checkpoint(
     roots: list[str], sid: int, lora_r: int
 ) -> Path:
-    selected = find_init_lora_ckpt(
-        roots=roots, sid=sid, lora_r=lora_r, explicit=None
-    )
-    return Path(selected)
+    try:
+        selected = find_init_lora_ckpt(
+            roots=roots, sid=sid, lora_r=lora_r, explicit=None
+        )
+        return Path(selected)
+    except FileNotFoundError as exact_rank_error:
+        # This experiment never loads the UNet LoRA tensors. It only restores
+        # cond_proj, whose architecture is independent of the UNet LoRA rank.
+        candidates = []
+        for root_text in roots:
+            root = Path(root_text)
+            if root.exists():
+                candidates.extend(root.rglob(f"subj{sid:02d}_lora_best.pt"))
+        unique = {str(path.resolve()): path for path in candidates}
+        candidates = list(unique.values())
+        if not candidates:
+            raise exact_rank_error
+
+        def key(path: Path):
+            drive_priority = int(
+                "/drive/" in str(path).replace("\\", "/")
+            )
+            return checkpoint_timestamp(path), drive_priority, str(path)
+
+        selected = max(candidates, key=key)
+        print(
+            f"  [Init fallback] S{sid:02d}: no r={lora_r} checkpoint; "
+            f"using cond_proj from {selected.parent.name}. "
+            "UNet LoRA tensors are not loaded in this experiment.",
+            flush=True,
+        )
+        return selected
 
 
 def resolve_all_checkpoints(args, subjects: list[int]) -> dict[int, dict[str, str]]:
