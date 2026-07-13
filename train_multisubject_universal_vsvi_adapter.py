@@ -174,6 +174,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--fp16", action="store_true")
     parser.add_argument("--audit_only", action="store_true")
     parser.add_argument(
+        "--resume",
+        action="store_true",
+        help="resume an interrupted run from progress.pt",
+    )
+    parser.add_argument(
         "--out_root",
         default=(
             "/content/drive/MyDrive/vsvi_data/"
@@ -269,6 +274,19 @@ def build_vs_centroids(
     device: torch.device,
 ):
     dataset = make_dataset(args.vs_root, sid, "train", args.seed, None)
+    finite_indices = [
+        index
+        for index in range(len(dataset))
+        if torch.isfinite(dataset[index][0]).all().item()
+    ]
+    dropped = len(dataset) - len(finite_indices)
+    if dropped:
+        print(
+            f"[WARN] S{sid:02d} VS centroid data: dropped "
+            f"{dropped} non-finite trials",
+            flush=True,
+        )
+    dataset = Subset(dataset, finite_indices)
     latent, labels = encode_dataset(
         dataset, encoder, args.eval_batch_size, device
     )
@@ -476,6 +494,12 @@ def save_history(path: Path, history: list[dict]) -> None:
         writer.writerows(history)
 
 
+def atomic_torch_save(payload: dict, path: Path) -> None:
+    temporary = path.with_suffix(path.suffix + ".tmp")
+    torch.save(payload, temporary)
+    temporary.replace(path)
+
+
 def aggregate_target_sessions(target_dataset, space, adapter, args, device):
     session_to_indices = {}
     for index, (_, _, session) in enumerate(target_dataset.samples):
@@ -514,6 +538,7 @@ def main() -> None:
         / f"seed{args.seed}"
     )
     metrics_path = run_dir / "metrics.json"
+    progress_path = run_dir / "progress.pt"
     if metrics_path.exists() and not args.overwrite:
         raise FileExistsError(f"{metrics_path} exists; pass --overwrite to rerun")
     run_dir.mkdir(parents=True, exist_ok=True)
@@ -553,18 +578,50 @@ def main() -> None:
     scaler = torch.cuda.amp.GradScaler(enabled=use_fp16)
     rng = np.random.RandomState(args.seed)
 
-    best_key = (-float("inf"), -float("inf"))
-    best_epoch = 0
-    best_state = None
-    stale = 0
-    history = []
     subject_class_pairs = [
         (sid, class_id)
         for sid in train_subjects
         for class_id in range(N_CLASSES)
     ]
+    best_key = (-float("inf"), -float("inf"))
+    best_epoch = 0
+    best_state = None
+    stale = 0
+    history = []
+    start_epoch = 1
 
-    for epoch in range(1, args.epochs + 1):
+    if args.resume and progress_path.is_file():
+        progress = torch.load(
+            progress_path, map_location=device, weights_only=False
+        )
+        if progress.get("target_subject") != args.target_subject:
+            raise RuntimeError("progress.pt target subject does not match")
+        if progress.get("train_subjects") != train_subjects:
+            raise RuntimeError("progress.pt training subjects do not match")
+        adapter.load_state_dict(progress["adapter"], strict=True)
+        optimizer.load_state_dict(progress["optimizer"])
+        scaler.load_state_dict(progress["scaler"])
+        best_key = tuple(float(value) for value in progress["best_key"])
+        best_epoch = int(progress["best_epoch"])
+        best_state = {
+            name: value.detach().cpu()
+            for name, value in progress["best_state"].items()
+        }
+        stale = int(progress["stale"])
+        history = list(progress["history"])
+        rng.set_state(progress["numpy_rng_state"])
+        torch.set_rng_state(progress["torch_rng_state"].cpu())
+        if device.type == "cuda" and progress.get("cuda_rng_states"):
+            torch.cuda.set_rng_state_all(progress["cuda_rng_states"])
+        start_epoch = int(progress["epoch"]) + 1
+        print(
+            f"[RESUME] epoch={start_epoch} best={best_epoch} stale={stale}",
+            flush=True,
+        )
+    elif args.resume:
+        print("[RESUME] progress.pt not found; starting at epoch 1", flush=True)
+
+    for epoch in range(start_epoch, args.epochs + 1):
         adapter.train()
         order = rng.permutation(len(subject_class_pairs))
         totals = {
@@ -687,6 +744,28 @@ def main() -> None:
             stale = 0
         else:
             stale += 1
+        save_history(run_dir / "history.csv", history)
+        progress = {
+            "epoch": epoch,
+            "target_subject": args.target_subject,
+            "train_subjects": train_subjects,
+            "adapter": cpu_state_dict(adapter),
+            "optimizer": optimizer.state_dict(),
+            "scaler": scaler.state_dict(),
+            "best_key": best_key,
+            "best_epoch": best_epoch,
+            "best_state": best_state,
+            "stale": stale,
+            "history": history,
+            "numpy_rng_state": rng.get_state(),
+            "torch_rng_state": torch.get_rng_state(),
+            "cuda_rng_states": (
+                torch.cuda.get_rng_state_all()
+                if device.type == "cuda"
+                else None
+            ),
+        }
+        atomic_torch_save(progress, progress_path)
         if epoch == 1 or epoch % 5 == 0 or stale == 0:
             print(
                 f"Ep {epoch:03d} loss={means['loss']:.4f} "
